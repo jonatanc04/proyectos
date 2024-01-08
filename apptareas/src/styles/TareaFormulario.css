@@ -1,0 +1,23 @@
+form {
+    margin-top: 20px;
+}
+
+input:nth-child(1) {
+    width: 250px;
+    height: 40px;
+    border: 2px solid rgb(33, 102, 63);
+    text-align: center;
+}
+
+input:nth-child(2) {
+    cursor: pointer;
+    width: 100px;
+    height: 40px;
+    border: 2px solid rgb(33, 102, 63);
+    background-color: rgb(33, 102, 63);
+    color: white;
+}
+
+input:nth-child(2):hover {
+    background-color: rgb(26, 80, 50);
+}

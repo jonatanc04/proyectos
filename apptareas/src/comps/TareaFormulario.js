@@ -1,12 +1,13 @@
 import React from "react";
 import '../styles/TareaFormulario.css';
 
-function Boton ({texto, esBotonClick, gestionClick}) {
-    return (<button
-    className={esBotonClick ? 'boton-click' : 'boton-borrar'}
-    onClick={gestionClick}>
-    {texto}
-    </button>)
+function Formulario () {
+    return (
+        <form>
+            <input type="text" name="nombre-tarea" placeholder="Introduce una tarea" />
+            <input type="submit" value="Añadir tarea" />
+        </form>
+    )
 }
 
-export default Boton;
+export default Formulario;

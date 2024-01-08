@@ -1,0 +1,41 @@
+.cuerpo-tarea {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    background-color: rgb(33, 102, 63);
+    margin-top: 15px;
+    border-radius: 10px;
+    width: 350px;
+    height: 50px;
+
+    color: white;
+}
+
+.nombre-tarea {
+    width: 75%;
+    margin-left: 10px;
+}
+
+.contenedor-botones {
+    width: 25%;
+    height: 100%;
+    margin-right: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.icon-completed {
+    cursor: pointer;
+    width: 30px;
+    height: 20px;
+}
+
+.icon-delete {
+    cursor: pointer;
+    width: 30px;
+    height: 20px;
+}

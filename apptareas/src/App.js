@@ -1,6 +1,7 @@
 import './App.css';
-//import ListaDeTareas from '../src/comps/ListaDeTareas';
 import titulo from './img/titulo.png';
+import ListaDeTareas from './comps/ListaDeTareas';
+import { v4 as uuidv4 } from 'uuid';
 
 function App() {
   return (
@@ -14,7 +15,7 @@ function App() {
       </div>
       <div className="tareas-lista-principal">
         <h1>Mis tareas</h1>
-         
+        <ListaDeTareas />
       </div>
     </div>
   );
