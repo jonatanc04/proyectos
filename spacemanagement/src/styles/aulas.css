@@ -1,0 +1,9 @@
+.aulas {
+  width: 100vw;
+  height: 84vh;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}

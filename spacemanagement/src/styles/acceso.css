@@ -1,0 +1,89 @@
+.acceso {
+  width: 100vw;
+  height: 84vh;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.formulario {
+  width: 50vw;
+  height: 70vh;
+
+  background-color: rgb(159, 190, 113);
+  border: 1px solid gray;
+  border-radius: 25px;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.imagen-container {
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+img {
+  height: 100%;
+}
+
+form {
+  width: 50%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+
+  margin-left: 7%;
+}
+
+label {
+  font-size: 3vh;
+  margin-bottom: 1vh;
+}
+
+input {
+  width: 20vw;
+  height: 3.5vh;
+  margin-bottom: 2vh;
+  font-size: 2.5vh;
+  border: none;
+}
+
+.button {
+  cursor: pointer;
+  width: 15vw;
+  margin-left: 10%;
+  margin-top: 2vh;
+  background-color: rgb(217, 255, 159);
+  border: none;
+  border-radius: 50px;
+
+  transition: all 0.4s ease;
+}
+
+.button:hover {
+  background-color: rgb(191, 255, 101);
+  box-shadow: 3px 3px 0;
+}
+
+p {
+  text-align: center;
+  font-size: 2.5vh;
+  color: red;
+  margin-top: 2vh;
+  width: 100%;
+  margin-left: -7%;
+}
