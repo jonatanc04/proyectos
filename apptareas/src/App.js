@@ -1,7 +1,6 @@
 import './App.css';
 import titulo from './img/titulo.png';
 import ListaDeTareas from './comps/ListaDeTareas';
-import { v4 as uuidv4 } from 'uuid';
 
 function App() {
   return (

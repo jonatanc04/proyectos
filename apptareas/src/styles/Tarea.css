@@ -11,11 +11,15 @@
     height: 50px;
 
     color: white;
+    cursor: pointer;
 }
 
 .nombre-tarea {
     width: 75%;
+    height: 100%;
     margin-left: 10px;
+    display: flex;
+    align-items: center;
 }
 
 .contenedor-botones {
@@ -34,8 +38,7 @@
     height: 20px;
 }
 
-.icon-delete {
-    cursor: pointer;
-    width: 30px;
-    height: 20px;
+.cuerpo-tarea.completada {
+    background-color: rgb(160, 67, 67);
+    text-decoration: line-through;
 }
