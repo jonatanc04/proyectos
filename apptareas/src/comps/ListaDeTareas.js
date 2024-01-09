@@ -39,7 +39,7 @@ function ListaDeTareas () {
                             key={tarea.id}
                             id={tarea.id}
                             texto={tarea.texto}
-                            completada={tarea.competada}
+                            completada={tarea.completada}
                             completarTarea={completarTarea}
                             eliminarTarea={eliminarTarea}
                         />
