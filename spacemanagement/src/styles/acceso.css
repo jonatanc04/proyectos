@@ -36,37 +36,43 @@
 
 img {
   height: 100%;
+  width: 100%;
+}
+
+.form-container {
+  width: 50%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 form {
-  width: 50%;
-
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-
-  margin-left: 7%;
 }
 
 label {
-  font-size: 3vh;
-  margin-bottom: 1vh;
+  font-size: 20px;
+  margin-bottom: 10px;
 }
 
 input {
   width: 20vw;
-  height: 3.5vh;
-  margin-bottom: 2vh;
-  font-size: 2.5vh;
-  border: none;
+  height: 30px;
+  margin-bottom: 15px;
+  font-size: 17px;
 }
 
 .button {
   cursor: pointer;
-  width: 15vw;
-  margin-left: 10%;
-  margin-top: 2vh;
+  width: 50%;
+  margin-top: 15px;
+  margin-left: 25%;
   background-color: rgb(217, 255, 159);
   border: none;
   border-radius: 50px;
@@ -81,9 +87,9 @@ input {
 
 p {
   text-align: center;
-  font-size: 2.5vh;
+  font-size: 20px;
   color: red;
   margin-top: 2vh;
   width: 100%;
-  margin-left: -7%;
+  height: 1px;
 }

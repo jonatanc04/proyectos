@@ -1,18 +1,33 @@
 import escuela from '../imgs/escuela.jpg';
 import '../styles/acceso.css';
 
-const Acceso = () => {
+function Acceso () {
+
+  const comprobarAcceso = e => {
+    e.preventDefault();
+    console.log(e.target.value);
+  }
+
   return ( 
     <div className="acceso">
       <div className="formulario">
         <div className='imagen-container'>
           <img src={escuela} alt="error al cargar"></img>
         </div>
-        <form>
+        <div className="form-container">
+        <form onSubmit={comprobarAcceso}>
           <label>Nombre de usuario:</label>
-          <input name="user" type="text"></input>
+          <input 
+            name="user" 
+            type="text" 
+            placeholder="Introduce tu nombre de usuario"
+          ></input>
           <label>Contraseña:</label>
-          <input name="pwd" type="password"></input>
+          <input 
+            name="pwd" 
+            type="password" 
+            placeholder="Introduce tu contraseña"
+          ></input>
           <input 
             type="submit"
             defaultValue="Acceder"
@@ -20,6 +35,7 @@ const Acceso = () => {
           />
           <p id='error'></p>
         </form>
+        </div>
       </div>
     </div>
   );

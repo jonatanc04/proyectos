@@ -1,10 +1,10 @@
 import './App.css';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Header from './components/header';
-import Footer from './components/footer';
-import Aulas from './components/aulas';
-import Acceso from './components/acceso';
+import Header from './comps/header';
+import Footer from './comps/footer';
+import Aulas from './comps/aulas';
+import Acceso from './comps/acceso';
 
 function App() {
   return (
