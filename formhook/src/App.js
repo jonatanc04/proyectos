@@ -4,7 +4,9 @@ import HookForm from './comps/HookForm';
 
 function App() {
   return (
-    
+    <div className='container mt-5'>
+      <HookForm />
+    </div>
   );
 }
 
