@@ -2,20 +2,6 @@ import escuela from '../imgs/escuela.jpg';
 import '../styles/acceso.css';
 import React, { useState } from 'react';
 
-/*
-dni
-: 
-"11111111A"
-pwd
-: 
-"$2y$10$44jNha1bXli8mVKLgFqxP.53dMFN10/uX0OMlDBjGVLKS5nlHVXVy"
-type
-: 
-"root"
-user
-: 
-"root"
-*/
 
 function Acceso () {
 
