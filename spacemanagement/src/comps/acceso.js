@@ -2,34 +2,79 @@ import escuela from '../imgs/escuela.jpg';
 import '../styles/acceso.css';
 import React, { useState } from 'react';
 
+/*
+dni
+: 
+"11111111A"
+pwd
+: 
+"$2y$10$44jNha1bXli8mVKLgFqxP.53dMFN10/uX0OMlDBjGVLKS5nlHVXVy"
+type
+: 
+"root"
+user
+: 
+"root"
+*/
+
 function Acceso () {
 
-  const [user, setUser] = useState('');
-  const [pwd, setPass] = useState('');
+  let intervalo;
+
+  const [datos, setDatos] = useState({
+    user:'',
+    pwd: ''
+  });
+
+  const [error, setError] = useState('');
+
+  const handleInputChange = e => {
+    setDatos({
+      ...datos,
+      [e.target.name] : e.target.value
+    });
+  }
+
+  const finError = () => {
+    setError('');
+    clearInterval(intervalo);
+  }
+
+  const gestionError = mensaje =>{
+    clearInterval(intervalo);
+    setError(mensaje);
+    intervalo = setInterval(() => finError(), 3500);
+  }
 
   const comprobarAcceso = e => {
     e.preventDefault();
 
-    var datos = "user=" + user + "&pwd=" + pwd;
-    fetch("http://localhost/proyectos/spacemanagement/api/sUsuarios/gestionUsuarios.php?" + datos, {
-        method: 'GET',
-    })
-    .then(res => {
-      return res.json();
-    })
-    .then(data => {
-      if (data === false) {
-          //incioAlerta("Los datos introducidos son erróneos.");
-          console.log('q t cayes tu puta');
-      } else {
-          //document.cookie = "user=" + data['user'] + "; expires=Thu, 18 Dec 2025 12:00:00 UTC; path=/;";
-          //document.cookie = "type=" + data['type'] + "; expires=Thu, 18 Dec 2025 12:00:00 UTC; path=/;";
-          console.log('furule');
-      }
-    })
-    .catch(error => {
-        console.error(error);
-    });
+    if (datos.user.trim() === "") {
+      gestionError("El campo usuario está vacío");
+    } else if (datos.pwd.trim() === "") {
+      gestionError("El campo contraseña está vacío");
+    } else {
+      var datosLog = "user=" + datos.user + "&pwd=" + datos.pwd;
+      fetch("http://localhost/proyectos/spacemanagement/api/sUsuarios/gestionUsuarios.php?" + datosLog, {
+          method: 'GET',
+      })
+      .then(res => {
+        return res.json();
+      })
+      .then(data => {
+        if (data === false) {
+            gestionError("Los datos introducidos son erróneos");
+            e.target.reset();
+        } else {
+            //document.cookie = "user=" + data['user'] + "; expires=Thu, 18 Dec 2025 12:00:00 UTC; path=/;";
+            //document.cookie = "type=" + data['type'] + "; expires=Thu, 18 Dec 2025 12:00:00 UTC; path=/;";
+            console.log(data);
+        }
+      })
+      .catch(error => {
+          console.error(error);
+      });
+    }
 
   }
 
@@ -46,23 +91,21 @@ function Acceso () {
             name="user" 
             type="text" 
             placeholder="Introduce tu nombre de usuario"
-            value={user}
-            onChange={e => setUser(e.target.value)}
+            onChange={handleInputChange}
           ></input>
           <label>Contraseña:</label>
           <input 
             name="pwd" 
             type="password" 
             placeholder="Introduce tu contraseña"
-            value={pwd}
-            onChange={e => setPass(e.target.value)}
+            onChange={handleInputChange}
           ></input>
           <input 
             type="submit"
             defaultValue="Acceder"
             className="button"
           />
-          <p id='error'></p>
+          <p id='error'>{ error }</p>
         </form>
         </div>
       </div>
