@@ -1,3 +1,5 @@
+import './App.css';
+
 import React, { useState } from 'react'
 import UserTable from './tables/UserTable'
 import AddUserForm from './forms/AddUserForm'
@@ -5,9 +7,9 @@ import EditUserForm from './forms/EditUserForm'
 
 const App = () => {
   const usersData = [
-    { id: 1, name: 'Tania', username: 'floppydiskette' },
-    { id: 2, name: 'Craig', username: 'siliconeidolon' },
-    { id: 3, name: 'Ben', username: 'benisphere' },
+    { id: 1, name: 'Sue', username: 'tequierocariñin' },
+    { id: 2, name: 'Mark', username: 'juguemosalfutbol' },
+    { id: 3, name: 'Axel', username: 'balonazobtw' },
   ]
 
   const initialFormState = { id: null, name: '', username: '' }
@@ -38,12 +40,12 @@ const App = () => {
 
   return (
     <div className="container">
-      <h1>CRUD App with Hooks</h1>
+      <h1>CRUD App con Hooks</h1>
       <div className="flex-row">
       <div className="flex-large">
           {editing ? (
-            <div>
-              <h2>Edit user</h2>
+            <div className="form-crud">
+              <h2>Editar usuario</h2>
               <EditUserForm
                 setEditing={setEditing}
                 currentUser={currentUser}
@@ -51,14 +53,14 @@ const App = () => {
               />
             </div>
           ) : (
-            <div>
-              <h2>Add user</h2>
+            <div className="form-crud">
+              <h2>Añadir usuario</h2>
               <AddUserForm addUser={addUser} />
             </div>
           )}
         </div>
         <div className="flex-large">
-          <h2>View users</h2>
+          <h2>Ver usuarios</h2>
           <UserTable users={users} editRow={editRow} deleteUser={deleteUser} />
         </div>
       </div>

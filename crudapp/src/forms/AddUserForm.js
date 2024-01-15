@@ -1,42 +1,37 @@
-import React, { useState } from 'react'
+import React from 'react';
+import { useForm } from 'react-hook-form';
 
 const AddUserForm = (props) => {
-  const initialFormState = { id: null, name: '', username: '' }
-  const [user, setUser] = useState(initialFormState)
+  const { register, handleSubmit, formState:{ errors }, reset } = useForm();
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target
-
-    setUser({ ...user, [name]: value })
-  }
+  const onSubmit = (data) => {
+    props.addUser(data);
+    reset();
+  };
 
   return (
-    <form
-      onSubmit={(event) => {
-        event.preventDefault()
-        if (!user.name || !user.username) return
-
-        props.addUser(user)
-        setUser(initialFormState)
-      }}
-    >
-      <label>Name</label>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <label>Nombre</label>
       <input
         type="text"
         name="name"
-        value={user.name}
-        onChange={handleInputChange}
+        {...register('name', {required:'Campo nombre obligatorio'})}
+        aria-invalid={errors.texto?"true":"false"}
       />
-      <label>Username</label>
+      <label>Nombre de usuario</label>
       <input
         type="text"
         name="username"
-        value={user.username}
-        onChange={handleInputChange}
+        {...register('username', {required:'Campo usuario obligatorio'})}
+        aria-invalid={errors.texto?"true":"false"}
       />
-      <button>Add new user</button>
+      <button type="submit">Añadir usuario</button>
+      <span>
+        {errors.name && <p>{errors.name.message}</p>}
+        {errors.username && <p>{errors.username.message}</p>}
+      </span>
     </form>
-  )
-}
+  );
+};
 
-export default AddUserForm
+export default AddUserForm;
