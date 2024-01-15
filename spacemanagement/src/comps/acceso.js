@@ -1,6 +1,7 @@
 import escuela from '../imgs/escuela.jpg';
 import '../styles/acceso.css';
 import React, { useState } from 'react';
+import { useCookies, CookiesProvider } from 'react-cookie';
 
 
 function Acceso () {
@@ -52,6 +53,7 @@ function Acceso () {
             gestionError("Los datos introducidos son erróneos");
             e.target.reset();
         } else {
+            
             //document.cookie = "user=" + data['user'] + "; expires=Thu, 18 Dec 2025 12:00:00 UTC; path=/;";
             //document.cookie = "type=" + data['type'] + "; expires=Thu, 18 Dec 2025 12:00:00 UTC; path=/;";
             console.log(data);
