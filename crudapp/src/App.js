@@ -4,12 +4,13 @@ import React, { useState } from 'react'
 import UserTable from './tables/UserTable'
 import AddUserForm from './forms/AddUserForm'
 import EditUserForm from './forms/EditUserForm'
+import { v4 as uuidv4 } from 'uuid';
 
 const App = () => {
   const usersData = [
-    { id: 1, name: 'Sue', username: 'tequierocariñin' },
-    { id: 2, name: 'Mark', username: 'juguemosalfutbol' },
-    { id: 3, name: 'Axel', username: 'balonazobtw' },
+    { id: uuidv4(), name: 'Sue', username: 'tequierocariñin' },
+    { id: uuidv4(), name: 'Mark', username: 'juguemosalfutbol' },
+    { id: uuidv4(), name: 'Axel', username: 'balonazobtw' },
   ]
 
   const initialFormState = { id: null, name: '', username: '' }
@@ -19,7 +20,7 @@ const App = () => {
   const [currentUser, setCurrentUser] = useState(initialFormState)
 
   const addUser = (user) => {
-    user.id = users.length + 1
+    user.id = uuidv4()
     setUsers([...users, user])
   }
 

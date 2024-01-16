@@ -1,5 +1,6 @@
-import React from 'react'
-import '../styles/table.css'
+import React from 'react';
+import '../styles/table.css';
+import User from './User';
 
 const UserTable = (props) => (
   <table>
@@ -13,26 +14,12 @@ const UserTable = (props) => (
     <tbody>
       {props.users.length > 0 ? (
         props.users.map((user) => (
-          <tr key={user.id}>
-            <td>{user.name}</td>
-            <td>{user.username}</td>
-            <td>
-            <button
-                onClick={() => {
-                    props.editRow(user)
-                }}
-                className="button muted-button"
-                >
-                Editar
-                </button>
-              <button
-                onClick={() => props.deleteUser(user.id)}
-                className="button muted-button"
-                >
-                Eliminar
-                </button>
-            </td>
-          </tr>
+          <User
+            key={user.id}
+            user={user}
+            editRow={props.editRow}
+            deleteUser={props.deleteUser}
+          />
         ))
       ) : (
         <tr>
@@ -41,6 +28,6 @@ const UserTable = (props) => (
       )}
     </tbody>
   </table>
-)
+);
 
-export default UserTable
+export default UserTable;

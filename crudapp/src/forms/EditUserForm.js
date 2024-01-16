@@ -1,50 +1,48 @@
-import React, { useState, useEffect } from 'react'
-import '../styles/form.css'
+import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import '../styles/form.css';
 
 const EditUserForm = (props) => {
-  const [user, setUser] = useState(props.currentUser)
+  const { register, handleSubmit, formState:{ errors }, reset } = useForm();
 
   useEffect(() => {
-    setUser(props.currentUser)
-  }, [props])
+    reset(props.currentUser);
+  }, [props.currentUser, reset]);
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target
-
-    setUser({ ...user, [name]: value })
-  }
+  const onSubmit = (data) => {
+    props.updateUser(props.currentUser.id, data);
+    props.setEditing(false);
+  };
 
   return (
-    <form
-      onSubmit={(event) => {
-        event.preventDefault()
-
-        props.updateUser(user.id, user)
-      }}
-    >
+    <form onSubmit={handleSubmit(onSubmit)}>
       <label>Nombre</label>
       <input
         type="text"
         name="name"
-        value={user.name}
-        onChange={handleInputChange}
+        {...register('name', { required: 'Campo nombre obligatorio' })}
+        aria-invalid={errors.name ? "true" : "false"}
       />
       <label>Nombre de usuario</label>
       <input
         type="text"
         name="username"
-        value={user.username}
-        onChange={handleInputChange}
+        {...register('username', { required: 'Campo usuario obligatorio' })}
+        aria-invalid={errors.username ? "true" : "false"}
       />
-      <button>Actualizar usuario</button>
+      <button type="submit">Actualizar usuario</button>
       <button
         onClick={() => props.setEditing(false)}
         className="button muted-button"
       >
         Cancelar
       </button>
+      <span>
+        {errors.name && <p>{errors.name.message}</p>}
+        {errors.username && <p>{errors.username.message}</p>}
+      </span>
     </form>
-  )
-}
+  );
+};
 
-export default EditUserForm
+export default EditUserForm;
