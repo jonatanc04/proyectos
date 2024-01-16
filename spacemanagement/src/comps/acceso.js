@@ -1,7 +1,7 @@
 import escuela from '../imgs/escuela.jpg';
 import '../styles/acceso.css';
 import React, { useState } from 'react';
-import { useCookies } from 'react-cookie';
+import Cookies from 'universal-cookie';
 
 function Acceso () {
 
@@ -11,7 +11,7 @@ function Acceso () {
     user:'',
     pwd: ''
   });
-  const [cookies, setCookie] = useCookies(['user', 'type']);
+  const cookies = new Cookies(null, { path: '/' });
   const [error, setError] = useState('');
 
   const handleInputChange = e => {
@@ -52,11 +52,8 @@ function Acceso () {
             gestionError("Los datos introducidos son erróneos");
             e.target.reset();
         } else {
-            setCookie('user', data['user'], { path: '/' });
-            setCookie('type', data['type'], { path: '/' });
-            //document.cookie = "user=" + data['user'] + "; expires=Thu, 18 Dec 2025 12:00:00 UTC; path=/;";
-            //document.cookie = "type=" + data['type'] + "; expires=Thu, 18 Dec 2025 12:00:00 UTC; path=/;";
-            console.log(data);
+            cookies.set('user', data['user'], { expires: new Date("December 17, 2099 03:24:00"), path: '/' });
+            cookies.set('type', data['type'], { expires: new Date("December 17, 2099 03:24:00"), path: '/' });
         }
       })
       .catch(error => {

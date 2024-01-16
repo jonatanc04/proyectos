@@ -5,6 +5,7 @@ import Header from './comps/header';
 import Footer from './comps/footer';
 import Aulas from './comps/aulas';
 import Acceso from './comps/acceso';
+import User from './comps/user';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Routes>
             <Route path='/' element={<Aulas />} />
             <Route path='/acceso' element={<Acceso />} />
+            <Route path='/user' element={<User/>} />
           </Routes>
         </div>
         <Footer />
