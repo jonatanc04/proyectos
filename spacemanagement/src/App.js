@@ -6,6 +6,7 @@ import Footer from './comps/footer';
 import Aulas from './comps/aulas';
 import Acceso from './comps/acceso';
 import User from './comps/user';
+import Crear from './comps/crear';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route path='/' element={<Aulas />} />
             <Route path='/acceso' element={<Acceso />} />
             <Route path='/user' element={<User/>} />
+            <Route path='/crear' element={<Crear/>} />
           </Routes>
         </div>
         <Footer />
