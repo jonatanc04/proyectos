@@ -85,7 +85,7 @@ input {
   box-shadow: 3px 3px 0;
 }
 
-p {
+#error {
   text-align: center;
   font-size: 20px;
   color: red;

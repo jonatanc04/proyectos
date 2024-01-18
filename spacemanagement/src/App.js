@@ -3,10 +3,10 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './comps/header';
 import Footer from './comps/footer';
-import Aulas from './comps/aulas';
-import Acceso from './comps/acceso';
-import User from './comps/user';
-import Crear from './comps/crear';
+import Aulas from './pages/aulas';
+import Acceso from './pages/acceso';
+import User from './pages/user';
+import Crear from './pages/crear';
 
 function App() {
   return (
