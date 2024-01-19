@@ -7,6 +7,7 @@ import Aulas from './pages/aulas';
 import Acceso from './pages/acceso';
 import User from './pages/user';
 import Crear from './pages/crear';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
             <Route path='/acceso' element={<Acceso />} />
             <Route path='/user' element={<User/>} />
             <Route path='/crear' element={<Crear/>} />
+            <Route path='*' element={<NotFound/>} />
           </Routes>
         </div>
         <Footer />

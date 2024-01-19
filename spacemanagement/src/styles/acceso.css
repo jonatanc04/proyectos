@@ -71,6 +71,7 @@ input {
 .button {
   cursor: pointer;
   width: 50%;
+  font-weight: bold;
   margin-top: 15px;
   margin-left: 25%;
   background-color: rgb(217, 255, 159);

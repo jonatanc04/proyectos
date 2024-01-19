@@ -1,9 +1,34 @@
 .crearAula {
-    width: 100%;
-    height: 85.9vh;
-  
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  }
+  width: 100%;
+  height: 85.9vh;
+
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
+}
+
+.imagenAula {
+  overflow: hidden;
+  grid-row: 1 / 3;
+}
+
+.formularioAulas {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.formularioAulas span{
+  height: 1px;
+  width: 1px;
+}
+
+.alinearBoton {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
