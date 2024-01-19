@@ -46,28 +46,28 @@ export default function FormAcceso() {
           method: "GET",
         }
       )
-        .then((res) => {
-          return res.json();
-        })
-        .then((data) => {
-          if (data === false) {
-            gestionError("Los datos introducidos son erróneos");
-            e.target.reset();
-          } else {
-            cookies.set("user", data["user"], {
-              expires: new Date("December 17, 2099 03:24:00"),
-              path: "/",
-            });
-            cookies.set("type", data["type"], {
-              expires: new Date("December 17, 2099 03:24:00"),
-              path: "/",
-            });
-            window.location.href = "/";
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        if (data === false) {
+          gestionError("Los datos introducidos son erróneos");
+          e.target.reset();
+        } else {
+          cookies.set("user", data["user"], {
+            expires: new Date("December 17, 2099 03:24:00"),
+            path: "/",
+          });
+          cookies.set("type", data["type"], {
+            expires: new Date("December 17, 2099 03:24:00"),
+            path: "/",
+          });
+          window.location.href = "/";
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
     }
   };
 

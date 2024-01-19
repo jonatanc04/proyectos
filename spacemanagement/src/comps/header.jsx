@@ -5,7 +5,6 @@ import Cookies from 'universal-cookie';
 export default function Header() {
 
   const cookies = new Cookies(null, { path: '/' });
-  console.log(cookies.get('type'));
 
   return (
     <div className="header">

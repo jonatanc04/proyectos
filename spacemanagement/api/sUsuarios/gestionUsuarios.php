@@ -1,16 +1,5 @@
 <?php
-
-// Permitir solicitudes desde cualquier origen
-header("Access-Control-Allow-Origin: *");
-// Permitir métodos HTTP específicos
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-// Permitir ciertos encabezados HTTP
-header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-// Permitir incluir cookies en las solicitudes
-header("Access-Control-Allow-Credentials: true");
-// Establecer el tipo de contenido para JSON
-header("Content-Type: application/json");
-
+include "../config/corsConfig.php";
 include "config/autocarga.php";
 $base = new Base();
 

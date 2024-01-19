@@ -2,9 +2,11 @@
 
 class Clase {
 
+    private $id;
     private $name;
 
-    function __construct($name='') {
+    function __construct($id, $name='') {
+        $this->id = $id;
         $this->name = $name;
     }
 
@@ -36,7 +38,8 @@ class Clase {
 
     function crear($link) {
         try {
-            $consulta = $link->prepare("INSERT INTO aulas (nombre) VALUES (:nombre)");
+            $consulta = $link->prepare("INSERT INTO aulas (id, nombre) VALUES (:id, :nombre)");
+            $consulta->bindParam(':id', $this->id);
             $consulta->bindParam(':nombre', $this->name);
             return $consulta->execute();
         } catch (PDOException $e) {

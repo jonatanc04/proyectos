@@ -1,11 +1,11 @@
 <?php
-
+include "../config/corsConfig.php";
 include "config/autocarga.php";
 $base = new Base();
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if (isset($_GET['nombre'])) {
-        $clase = new Clase($_GET['nombre']);
+        $clase = new Clase($_GET['id'], $_GET['nombre']);
         $existe = $clase->getClase($base->link);
         if ($existe) {
             header("HTTP/1.1 200 OK");
@@ -26,7 +26,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         }
     }
 } else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $clase = new Clase($_POST['nombre']);
+    $inputJSON = file_get_contents('php://input');
+    $inputData = json_decode($inputJSON, true);
+    
+    $clase = new Clase($inputData['id'], $inputData['nombre']);
     $existe = $clase->getClase($base->link);
     if (!$existe) {
         header("HTTP/1.1 200 OK");
