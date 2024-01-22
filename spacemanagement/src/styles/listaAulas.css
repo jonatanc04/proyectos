@@ -1,0 +1,21 @@
+.titulo-listado {
+    font-size: 20px;
+    padding: 20px;
+}
+
+li {
+    cursor: pointer;
+    margin-left: 40px;
+    width: 150px;
+    font-size: 20px;
+    transition: all 0.4s ease;
+}
+
+li:hover {
+    transform: scale(1.3);
+}
+
+.no-aulas {
+    padding-left: 10px;
+    color: red;
+}

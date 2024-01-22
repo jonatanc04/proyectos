@@ -17,9 +17,9 @@ const User = () => {
       {cookies.get('type') === 'root' ? (
         <div className='opcionesRoot'>
           <Link to='/crear'><p>Crear aulas</p></Link>
-          <Link to='/crear'><p>Crear usuarios</p></Link>
-          <Link to='/crear'><p>Crear calendario</p></Link>
-          <Link to='/crear'><p>Editar calendario</p></Link>
+          <Link to='/crearUsers'><p>Crear usuarios</p></Link>
+          <Link to='/'><p>Crear calendario</p></Link>
+          <Link to='/'><p>Editar calendario</p></Link>
       </div>
       ) : (
         <div className='opcionesRoot'>

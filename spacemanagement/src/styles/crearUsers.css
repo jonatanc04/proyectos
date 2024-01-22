@@ -1,0 +1,39 @@
+.crearUsers {
+    width: 100%;
+    height: 85.9vh;
+
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+}
+
+.imagenUsers {
+    overflow: hidden;
+    grid-row: 1 / 3;
+}
+
+.formularioUsers, .listadoUsers {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.listadoUsers li{
+    width: 300px;
+}
+
+.listadoUsers table {
+    margin-left: 100px;
+}
+
+.formularioUsers span{
+    height: 1px;
+    width: 1px;
+}
+
+select {
+    width: 375px;
+    font-size: 20px;
+    margin-bottom: 20px;
+}

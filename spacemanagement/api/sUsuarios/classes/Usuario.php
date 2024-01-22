@@ -49,6 +49,19 @@ class Usuario {
         }
     }
 
+    function comprobar($link) {
+        $consulta = $link->prepare("SELECT * FROM usuarios WHERE user = :user");
+        $consulta->bindParam(':user', $this->user);
+        $consulta->execute();
+        $usuario = $consulta->fetch(PDO::FETCH_ASSOC);
+
+        if ($usuario !== false) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     function registro($link) {
         try {
             $consulta = $link->prepare("INSERT INTO usuarios (user, pwd, dni, type) VALUES (:user, :pwd, :dni, :type)");
