@@ -18,7 +18,7 @@ export default function FormRegistro({ onUserAdded }) {
     intervalo = setInterval(() => finError(), 3500);
   };
 
-  const crearAula = (data, e) => {
+  const crearUser = (data, e) => {
     console.log(data);
     fetch(
       "http://localhost/proyectos/spacemanagement/api/sUsuarios/gestionUsuarios.php",
@@ -46,7 +46,7 @@ export default function FormRegistro({ onUserAdded }) {
   }
 
   return (
-    <form onSubmit={handleSubmit(crearAula)}>
+    <form onSubmit={handleSubmit(crearUser)}>
       <label>Nombre del usuario</label>
       <input
         name="user"

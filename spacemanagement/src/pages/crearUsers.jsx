@@ -7,7 +7,7 @@ import ListaUsers from "../comps/listaUsers";
 const CrearUsers = () => {
   const [updateLista, setUpdateLista] = useState(false);
 
-  const handleAulaAdded = () => {
+  const handleUserAdded = () => {
     setUpdateLista(!updateLista);
   };
 
@@ -17,10 +17,10 @@ const CrearUsers = () => {
         <img src={escuela} alt="error al cargar"></img>
       </div>
       <div className="formularioUsers">
-        <FormRegistro onAulaAdded={handleAulaAdded} />
+        <FormRegistro onUserAdded={handleUserAdded} />
       </div>
       <div className="listadoUsers">
-        <ListaUsers onAulaAdded={handleAulaAdded} />
+        <ListaUsers onUserAdded={handleUserAdded} />
       </div>
     </div>
   );
