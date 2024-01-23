@@ -1,7 +1,7 @@
 import React from "react";
 import '../styles/listaAulas.css';
 
-export default function ListaUsers({ onAulaAdded }) {
+export default function ListaUsers({ onUserAdded }) {
   const [users, setUsers] = React.useState([]);
 
   React.useEffect(() => {
@@ -24,7 +24,7 @@ export default function ListaUsers({ onAulaAdded }) {
       }
     };
     fetchData();
-  }, [onAulaAdded]);
+  }, [onUserAdded]);
 
   return (
     <table>

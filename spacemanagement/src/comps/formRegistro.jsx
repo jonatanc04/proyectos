@@ -46,7 +46,7 @@ export default function FormRegistro({ onUserAdded }) {
   }
 
   return (
-    <form onSubmit={handleSubmit(crearUser)}>
+    <form className='elderegistro' onSubmit={handleSubmit(crearUser)}>
       <label>Nombre del usuario</label>
       <input
         name="user"
