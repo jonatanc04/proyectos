@@ -1,7 +1,7 @@
 import escuela from '../imgs/escuela.jpg';
 import '../styles/acceso.css';
 import React from 'react';
-import FormAcceso from '../comps/formAcceso';
+import FormAcceso from '../comps/FormAcceso';
 
 function Acceso () {
 

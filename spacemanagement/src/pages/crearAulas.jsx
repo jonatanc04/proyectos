@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import '../styles/crear.css';
 import escuela from '../imgs/escuela.jpg';
-import FormCrear from '../comps/formCrear';
-import ListaAulas from '../comps/listaAulas';
+import FormCrear from '../comps/FormCrear';
+import ListaAulas from '../comps/ListaAulas';
 
 const Crear = () => {
   const [updateLista, setUpdateLista] = useState(false);

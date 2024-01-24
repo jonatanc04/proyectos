@@ -1,12 +1,12 @@
 import './App.css';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Header from './comps/header';
-import Footer from './comps/footer';
+import Header from './comps/Header';
+import Footer from './comps/Footer';
 import Aulas from './pages/aulas';
 import Acceso from './pages/acceso';
 import User from './pages/user';
-import Crear from './pages/crear';
+import Crear from './pages/crearAulas';
 import CrearUsers from './pages/crearUsers';
 import NotFound from './pages/NotFound';
 

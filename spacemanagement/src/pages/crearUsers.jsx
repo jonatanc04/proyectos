@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import "../styles/crearUsers.css";
 import escuela from "../imgs/escuela.jpg";
-import FormRegistro from "../comps/formRegistro";
-import ListaUsers from "../comps/listaUsers";
+import FormRegistro from "../comps/FormRegistro";
+import ListaUsers from "../comps/ListaUsers";
 
 const CrearUsers = () => {
   const [updateLista, setUpdateLista] = useState(false);
