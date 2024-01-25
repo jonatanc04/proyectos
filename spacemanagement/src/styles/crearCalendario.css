@@ -1,0 +1,47 @@
+.container-form-calendar {
+    width: 100%;
+    height: 85.9vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-form-calendar h1 {
+    padding: 0;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.container-form-calendar form {
+    width: fit-content;
+    height: fit-content;
+
+    display: flex;
+    flex-direction: row;
+}
+
+.container-form-calendar input {
+    width: 400px;
+    text-align: center;
+}
+
+.container-form-calendar label {
+    font-size: 18px;
+}
+
+.col {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+}
+
+.container-button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
