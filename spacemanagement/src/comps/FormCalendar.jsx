@@ -1,123 +1,84 @@
-import { v4 as uuidv4 } from 'uuid';
 import { useForm } from 'react-hook-form';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 export default function FormCalendar() {
 
-  const { register, handleSubmit } = useForm();
-  const addID = data => {
-    return (
-      {
-        "nombre": data.nombre,
-        "id_calendario": uuidv4(),
-        "hora_inicio": data.hora_inicio,
-        "tiempo_sesion": data.tiempo_sesion,
-        "total_sesiones": data.total_sesiones,
-        "descansos": data.descansos,
-        "tiempo_descanso": data.tiempo_descanso,
-        "pos_descanso": data.pos_descanso,
-        "hora_init_tarde": data.hora_init_tarde,
-        "tiempo_ses_tarde": data.tiempo_desc_tarde,
-        "total_ses_tarde": data.total_ses_tarde,
-        "descansos_tarde": data.descansos_tarde,
-        "tiempo_desc_tarde": data.tiempo_desc_tarde,
-        "pos_desc_tarde": data.pos_desc_tarde
-    }
-    )
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  const [dates, setData] = useState([]);
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = async () => {
+    const res = await axios.get("http://localhost/proyectos/spacemanagement/api/sCalendario/datosCalendario.php");
+    setData(res.data);
   }
-  
-  const crearCalendario = (data) => {
-    const dataID = addID(data);
-    
+
+  const postData = async (newData) => {
+    const res = await axios.post("http://localhost/proyectos/spacemanagement/api/sCalendario/datosCalendario.php", newData, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    return res;
+  }
+
+  const addNumberOfSpace = data => {
+    return {
+      espacio: dates.length + 1,
+      duracion: data.duracion,
+      horaInicio: data.horaInicio,
+      horario: data.horario,
+      tipo: data.tipo
+    }
+  }
+
+  const addSpace = data => {
+    console.log(data);
+    const newSpace = addNumberOfSpace(data);
+    console.log(newSpace);
+    postData(newSpace);
   }
 
   return (
-    <form onSubmit={handleSubmit(crearCalendario)}>
-      <div className='col'>
-        <label>Nombre</label>
-        <input
-          {...register("nombre")}
-          type="text"
-          placeholder='Introduce el nombre del calendario'
-        />
-        <label>Hora de inicio</label>
-        <input
-          {...register("hora_inicio")}
-          type="text"
-          placeholder='Introduce la hora en formato HH:MM'
-        />
-        <label>Tiempo por sesión</label>
-        <input
-          {...register("tiempo_sesion")}
-          type="number"
-          placeholder='Duración en minutos por sesión'
-        />
-        <label>Total de sesiones</label>
-        <input
-          {...register("total_sesiones")}
-          type="number"
-          placeholder='Número total de sesiones (mañana)'
-        />
-        <label>Descansos</label>
-        <input
-          {...register("descansos")}
-          type="number"
-          placeholder='Número total de descansos (mañana)'
-        />
-        <label>Tiempo por descanso</label>
-        <input
-          {...register("tiempo_descanso")}
-          type="number"
-          placeholder='Duración en minutos por descanso'
-        />
-        <label>Posición del descanso</label>
-        <input
-          {...register("pos_descanso")}
-          type="number"
-          placeholder='Cada cuantas horas hay descanso'
-        />
+    <form onSubmit={handleSubmit(addSpace)}>
+      <label>Horario del espacio</label>
+      <select {...register('horario', { required: 'Debes seleccionar una franja horaria' })} aria-invalid={errors.horario ? "true" : "false"}>
+        <option value="m">Mañana</option>
+        <option value="t">Tarde</option>
+      </select>
+      <label>Hora de inicio</label>
+      <input
+        name="horaInicio"
+        type="text"
+        placeholder="Introduce una hora en formato HH:MM"
+        {...register('horaInicio', { required: 'Debes introducir una hora de inicio' })}
+        aria-invalid={errors.horaInicio ? "true" : "false"}
+      />
+      <label>Tipo de espacio</label>
+      <select {...register('tipo', { required: 'Debes seleccionar un tipo de espacio' })} aria-invalid={errors.tipo ? "true" : "false"}>
+        <option value="c">Clase</option>
+        <option value="d">Descanso</option>
+      </select>
+      <label>Duración</label>
+      <input
+        name="duracion"
+        type="number"
+        placeholder="Introduce la duración del espacio"
+        {...register('duracion', { required: 'Debes introducir una duración' })}
+        aria-invalid={errors.duracion ? "true" : "false"}
+      />
+      <div className='button-form'>
+        <button type='submit'>Añadir</button>
+        <span>
+        {errors.horario && <p className='error'>{errors.horario.message}</p>}
+        {errors.horaInicio && <p className='error'>{errors.horaInicio.message}</p>}
+        {errors.tipo && <p className='error'>{errors.tipo.message}</p>}
+        {errors.duracion && <p className='error'>{errors.duracion.message}</p>}
+      </span>
       </div>
-      <div className='col'>
-        <label>Hora de inicio - tardes</label>
-        <input
-          {...register("hora_init_tarde")}
-          type="text"
-          placeholder='Introduce la hora en formato HH:MM'
-        />
-        <label>Tiempo por sesión - tardes</label>
-        <input
-          {...register("tiempo_ses_tarde")}
-          type="number"
-          placeholder='Duración en minutos por sesión'
-        />
-        <label>Total de sesiones - tardes</label>
-        <input
-          {...register("total_ses_tarde")}
-          type="number"
-          placeholder='Número total de sesiones (tarde)'
-        />
-        <label>Descansos - tardes</label>
-        <input
-          {...register("descansos_tarde")}
-          type="number"
-          placeholder='Número total de descansos (tarde)'
-        />
-        <label>Tiempo por descanso - tardes</label>
-        <input
-          {...register("tiempo_desc_tarde")}
-          type="number"
-          placeholder='Duración en minutos por descanso'
-        />
-        <label>Posición del descanso - tardes</label>
-        <input
-          {...register("pos_desc_tarde")}
-          type="number"
-          placeholder='Cada cuantas horas hay descanso'
-        />
-        <div className='container-button'>
-          <button type='submit'>Crear</button>
-        </div>
-      </div> 
     </form>
   );
 }
