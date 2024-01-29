@@ -1,0 +1,50 @@
+.container-form-calendar {
+    width: 100%;
+    height: 85.9vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-form-calendar h1 {
+    padding: 0;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.container-form-calendar form {
+    width: fit-content;
+    height: fit-content;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.button-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;    
+    align-items: center;
+}
+
+.button-form p {
+    width: 100%;
+    text-align: center;
+    color: red;
+}
+
+.container-data-form {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.container-form-data div {
+    width: 50%;
+    height: 100%;
+}

@@ -4,7 +4,7 @@ import escuela from '../imgs/escuela.jpg';
 import FormCrear from '../comps/FormCrear';
 import ListaAulas from '../comps/ListaAulas';
 
-const Crear = () => {
+const CrearAulas = () => {
   const [updateLista, setUpdateLista] = useState(false);
 
   const handleAulaAdded = () => {
@@ -26,4 +26,4 @@ const Crear = () => {
   );
 }
 
-export default Crear;
+export default CrearAulas;
