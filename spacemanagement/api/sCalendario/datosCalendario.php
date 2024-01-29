@@ -1,6 +1,12 @@
 <?php
 include "../config/corsConfig.php";
 include "config/autocarga.php";
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    header("HTTP/1.1 200 OK");
+    exit;
+}
+
 $base = new Base();
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {

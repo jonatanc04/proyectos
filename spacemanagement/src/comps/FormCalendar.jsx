@@ -1,33 +1,29 @@
 import { useForm } from 'react-hook-form';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import axios from 'axios';
 
-export default function FormCalendar() {
+export default function FormCalendar({dates}) {
 
   const { register, handleSubmit, formState: { errors } } = useForm();
-  const [dates, setData] = useState([]);
-
-  useEffect(() => {
-    getData();
-  }, []);
-
-  const getData = async () => {
-    const res = await axios.get("http://localhost/proyectos/spacemanagement/api/sCalendario/datosCalendario.php");
-    setData(res.data);
-  }
 
   const postData = async (newData) => {
-    const res = await axios.post("http://localhost/proyectos/spacemanagement/api/sCalendario/datosCalendario.php", newData, {
+    const res = await axios.post("http://localhost/proyectos/spacemanagement/api/sCalendario/datosCalendario.php", newData, 
+    {
+      withCredentials: true,
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       }
     })
     return res;
   }
 
-  const addNumberOfSpace = data => {
+  const addNumberOfSpace = (data) => {
+
+    let espacio;
+    data.length > 0 ? espacio = dates.length + 1 : espacio = 1;
+
     return {
-      espacio: dates.length + 1,
+      espacio: espacio,
       duracion: data.duracion,
       horaInicio: data.horaInicio,
       horario: data.horario,
@@ -36,7 +32,6 @@ export default function FormCalendar() {
   }
 
   const addSpace = data => {
-    console.log(data);
     const newSpace = addNumberOfSpace(data);
     console.log(newSpace);
     postData(newSpace);
