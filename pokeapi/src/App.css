@@ -1,0 +1,23 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    background-color: rgb(119, 119, 119);
+
+    display: flex;
+    justify-content: center;
+}
+
+thead {
+    color: white;
+    background-color: rgb(59, 59, 59);
+}
+
+tr, td {
+    width: 100px;
+    height: 40px;
+    text-align: center;
+}
