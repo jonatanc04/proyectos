@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import React from 'react';
 import axios from 'axios';
 
-export default function FormCalendar({dates}) {
+export default function FormCalendar({dates, updateData}) {
 
   const { register, handleSubmit, formState: { errors } } = useForm();
 
@@ -18,24 +18,30 @@ export default function FormCalendar({dates}) {
   }
 
   const addNumberOfSpace = (data) => {
-
     let espacio;
-    data.length > 0 ? espacio = dates.length + 1 : espacio = 1;
-
+    if (dates.length > 0) {
+      const lastSpace = dates[dates.length - 1];
+      espacio = parseInt(lastSpace.espacio, 10) + 1;
+    } else {
+      espacio = 1;
+    }
+  
     return {
       espacio: espacio,
       duracion: data.duracion,
       horaInicio: data.horaInicio,
       horario: data.horario,
       tipo: data.tipo
-    }
-  }
+    };
+  };
+  
 
-  const addSpace = data => {
+  const addSpace = async (data) => {
     const newSpace = addNumberOfSpace(data);
-    console.log(newSpace);
-    postData(newSpace);
-  }
+    await postData(newSpace);
+    updateData();
+  };
+  
 
   return (
     <form onSubmit={handleSubmit(addSpace)}>
@@ -47,7 +53,7 @@ export default function FormCalendar({dates}) {
       <label>Hora de inicio</label>
       <input
         name="horaInicio"
-        type="text"
+        type="time"
         placeholder="Introduce una hora en formato HH:MM"
         {...register('horaInicio', { required: 'Debes introducir una hora de inicio' })}
         aria-invalid={errors.horaInicio ? "true" : "false"}

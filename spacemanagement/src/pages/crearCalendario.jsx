@@ -17,12 +17,16 @@ export default function CrearCalendario() {
     setData(res.data);
   }
 
+  const updateData = async () => {
+    await getData();
+  }
+
   return (
     <div className="container-form-calendar">
       <h1>Formulario de creación de calendario</h1>
       <div className="container-data-form">
         <div className="form-calendar">
-          <FormCalendar dates={dates} />
+          <FormCalendar dates={dates} updateData={updateData} />
         </div>
         <div className="data-calendar">
           <DatosCalendario dates={dates}/>
