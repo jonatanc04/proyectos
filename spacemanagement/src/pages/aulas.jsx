@@ -1,9 +1,24 @@
 import '../styles/aulas.css';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { VistaCalendar } from '../comps/VistaCalendar';
 
 const Aulas = () => {
+
+  const [calendar, setData] = useState([]);
+
+  const getData = async () => {
+    const res = await axios.get("http://localhost/proyectos/spacemanagement/api/sCalendario/datosCalendario.php");
+    setData(res.data);
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return ( 
     <div className="aulas">
-      <h2>Aquí se verán las aulas</h2>
+      <VistaCalendar calendar={calendar} />
     </div>
   );
 }

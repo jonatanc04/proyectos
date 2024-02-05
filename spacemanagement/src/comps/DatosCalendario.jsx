@@ -7,23 +7,23 @@ export const DatosCalendario = ({dates}) => {
   }
 
   function sumarMinutos(hora, duracion) {
-    let format = formatHora(hora);
-    let separar = format.split(":")
-    separar[1] = parseInt(separar[1]) + parseInt(duracion);
+    let separar = hora.split(":");
+    let horas = parseInt(separar[0]);
+    let minutos = parseInt(separar[1]);
 
-    if (parseInt(separar[1]) >= 60) {
-      separar[1] = parseInt(separar[1]) - 60;
-      if (parseInt(separar[0]) === 23 ? separar[0] = "00" : separar[0] = parseInt(separar[0]) +1);
+    minutos += parseInt(duracion);
+
+    horas += Math.floor(minutos / 60);
+    minutos %= 60;
+
+    if (horas >= 24) {
+      horas %= 24;
     }
 
-    if (parseInt(separar[0]) < 9 && parseInt(separar[0]) > 1) {
-      separar[0] = "0" + separar[0];
-    }
-    if (parseInt(separar[1]) < 9 && parseInt(separar[1]) > 0) {
-      separar[1] = "0" + separar[1];
-    }
+    let horasStr = horas < 10 ? "0" + horas : horas.toString();
+    let minutosStr = minutos < 10 ? "0" + minutos : minutos.toString();
 
-    return(separar[0] + ":" + separar[1]);
+    return horasStr + ":" + minutosStr;
   }
   
 
