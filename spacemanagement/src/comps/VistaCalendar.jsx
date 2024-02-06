@@ -88,20 +88,33 @@ export const VistaCalendar = ({ calendar }) => {
       <table className='tabla-principal'>
         <thead>
           <tr>
-            <td></td>
+            <td className='none-td'></td>
             {currentWeekdays.map((day, index) => (
-              <td key={index}>{`${day.name} ${day.number}`}</td>
+              <td className='color-table' key={index}>{`${day.name} ${day.number}`}</td>
             ))}
           </tr>
         </thead>
         <tbody>
           {filtrarPorPartes(calendar, horarioSeleccionado).map((hora, index) => (
-            <tr key={index}>
-              <td>{formatHora(hora.horaInicio) + " - " + sumarMinutos(hora.horaInicio, hora.duracion)}</td>
-              {[...Array(5)].map((_, dayIndex) => (
-                <td key={dayIndex}></td>
-              ))}
+            hora.tipo === 'd' ? (
+              <tr className='descansos-tr' key={index}>
+                <td className='color-table'>{formatHora(hora.horaInicio) + " - " + sumarMinutos(hora.horaInicio, hora.duracion)}</td>
+                <td>P</td>
+                <td>A</td>
+                <td>T</td>
+                <td>I</td>
+                <td>0</td>
+              </tr>
+            ) : (
+              <tr key={index}>
+              <td className='color-table'>{formatHora(hora.horaInicio) + " - " + sumarMinutos(hora.horaInicio, hora.duracion)}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
+            )
           ))}
         </tbody>
       </table>

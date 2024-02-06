@@ -70,3 +70,15 @@ td:first-child {
     width: 200px;
     text-align: center;
 }
+
+.color-table {
+    background-color: rgb(159, 190, 113);
+}
+
+.none-td {
+    background-color: black;
+}
+
+.descansos-tr {
+    background-color: rgb(119, 139, 89);
+}
