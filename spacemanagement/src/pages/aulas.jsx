@@ -5,11 +5,11 @@ import { VistaCalendar } from '../comps/VistaCalendar';
 
 const Aulas = () => {
 
-  const [calendar, setData] = useState([]);
+  const [calendar, setCalendar] = useState([]);
 
   const getData = async () => {
     const res = await axios.get("http://localhost/proyectos/spacemanagement/api/sCalendario/datosCalendario.php");
-    setData(res.data);
+    setCalendar(res.data);
   }
 
   useEffect(() => {
@@ -18,7 +18,11 @@ const Aulas = () => {
 
   return ( 
     <div className="aulas">
-      <VistaCalendar calendar={calendar} />
+      {!calendar ? (
+        <p>No existe un calendario</p>
+      ) : (
+        <VistaCalendar calendar={calendar} />
+      )}
     </div>
   );
 }

@@ -27,6 +27,28 @@
     justify-content: center;
 }
 
+.cont-opt2 {
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.cont-opt2 button{
+    font-size: 15px;
+    width: 100px;
+    margin: 5px;
+}
+
+.monthYear {
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
 .tabla-principal {
     height: 90%;
     border: 2px solid black;
