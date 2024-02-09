@@ -82,3 +82,7 @@ td:first-child {
 .descansos-tr {
     background-color: rgb(119, 139, 89);
 }
+
+.blocked {
+    background-color: gray;
+}

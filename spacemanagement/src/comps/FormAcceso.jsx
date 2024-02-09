@@ -62,6 +62,10 @@ export default function FormAcceso() {
             expires: new Date("December 17, 2099 03:24:00"),
             path: "/",
           });
+          cookies.set("dni", data["dni"], {
+            expires: new Date("December 17, 2099 03:24:00"),
+            path: "/",
+          });
           window.location.href = "/";
         }
       })

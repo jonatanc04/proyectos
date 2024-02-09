@@ -9,6 +9,7 @@ const User = () => {
   const cerrarSesion = () => {
     cookies.remove('user');
     cookies.remove('type');
+    cookies.remove('dni');
     window.location.href='/';
   }
 

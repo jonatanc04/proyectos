@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import "../styles/vistaCalendar.css";
 
-export const VistaCalendar = ({ calendar }) => {
+export const VistaCalendar = ({ calendar, reservas }) => {
   const [horarioSeleccionado, setHorarioSeleccionado] = useState("m");
   const [currentDate, setCurrentDate] = useState(new Date());
   const [prevWeekDisabled, setPrevWeekDisabled] = useState(true);
@@ -55,7 +55,7 @@ export const VistaCalendar = ({ calendar }) => {
     minutos %= 60;
 
     if (horas >= 24) {
-        horas %= 24;
+      horas %= 24;
     }
 
     let horasStr = horas < 10 ? "0" + horas : horas.toString();
@@ -63,6 +63,31 @@ export const VistaCalendar = ({ calendar }) => {
 
     return horasStr + ":" + minutosStr;
   }
+
+  const handleTdClick = (horaInicio, dayName, dayNumber) => {
+    console.log(`${horaInicio}-${dayName}-${dayNumber}`);
+  };
+
+  const pastTo = (horaInicio, dayNumber) => {
+    const currentDate = new Date();
+    const currentHour = currentDate.getHours();
+    const currentMinute = currentDate.getMinutes();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth();
+    const currentDay = currentDate.getDate();
+
+    const [hora, minutos] = horaInicio.split(':');
+    const startHour = parseInt(hora);
+    const startMinute = parseInt(minutos);
+
+    const currentDateTime = new Date(currentYear, currentMonth, currentDay, currentHour, currentMinute);
+    const comparedDateTime = new Date(currentYear, currentMonth, dayNumber, startHour, startMinute);
+
+    if (comparedDateTime <= currentDateTime) {
+      return true;
+    }
+    return false;
+  };
 
   return (
     <div className='calendarContainer'>
@@ -84,6 +109,9 @@ export const VistaCalendar = ({ calendar }) => {
           <button disabled={prevWeekDisabled} onClick={previousWeek}>Semana Anterior</button>
           <button disabled={nextWeekDisabled} onClick={nextWeek}>Siguiente Semana</button>
         </div>
+        <div className='cont-op3'>
+          
+        </div>
       </div>
       <table className='tabla-principal'>
         <thead>
@@ -95,25 +123,21 @@ export const VistaCalendar = ({ calendar }) => {
           </tr>
         </thead>
         <tbody>
-          {filtrarPorPartes(calendar, horarioSeleccionado).map((hora, index) => (
+          {filtrarPorPartes(calendar, horarioSeleccionado).map((hora, horaIndex) => (
             hora.tipo === 'd' ? (
-              <tr className='descansos-tr' key={index}>
+              <tr className='descansos-tr' key={horaIndex}>
                 <td className='color-table'>{formatHora(hora.horaInicio) + " - " + sumarMinutos(hora.horaInicio, hora.duracion)}</td>
-                <td>P</td>
-                <td>A</td>
-                <td>T</td>
-                <td>I</td>
-                <td>0</td>
+                {currentWeekdays.map((day, dayIndex) => (
+                  pastTo(hora.horaInicio, day.number) ? (<td key={`${hora.horaInicio}-${dayIndex}`} className='blocked'></td>) : (<td key={`${hora.horaInicio}-${dayIndex}`} onClick={() => handleTdClick(hora.horaInicio, day.name, day.number)}></td>)
+                ))}
               </tr>
             ) : (
-              <tr key={index}>
-              <td className='color-table'>{formatHora(hora.horaInicio) + " - " + sumarMinutos(hora.horaInicio, hora.duracion)}</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
+              <tr key={horaIndex}>
+                <td className='color-table'>{formatHora(hora.horaInicio) + " - " + sumarMinutos(hora.horaInicio, hora.duracion)}</td>
+                {currentWeekdays.map((day, dayIndex) => (
+                  pastTo(hora.horaInicio, day.number) ? (<td key={`${hora.horaInicio}-${dayIndex}`} className='blocked'></td>) : (<td key={`${hora.horaInicio}-${dayIndex}`} onClick={() => handleTdClick(hora.horaInicio, day.name, day.number)}></td>)
+                ))}
+              </tr>
             )
           ))}
         </tbody>
