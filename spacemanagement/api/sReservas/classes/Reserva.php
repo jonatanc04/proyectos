@@ -5,13 +5,19 @@ class Reserva {
     private $id;
     private $idAula;
     private $dniUser;
-    private $fecha_reserva;
+    private $diaInicio;
+    private $horaInicio;
+    private $diaFin;
+    private $horaFin;
 
-    function __construct($id, $idAula='', $dniUser='', $fecha_reserva='') {
+    function __construct($id = null, $idAula='', $dniUser='', $diaInicio='', $horaInicio='', $diaFin='', $horaFin='') {
         $this->id = $id;
         $this->idAula = $idAula;
         $this->dniUser = $dniUser;
-        $this->fecha_reserva = $fecha_reserva;
+        $this->diaInicio = $diaInicio;
+        $this->horaInicio = $horaInicio;
+        $this->diaFin = $diaFin;
+        $this->horaFin = $horaFin;
     }
 
     static function todasLasReservas($link) {
@@ -43,17 +49,18 @@ class Reserva {
 
     function reservar($link) {
         try {
-            $consulta = $link->prepare("INSERT INTO reservas (id, idAula, dniUser, fecha_reserva) VALUES (:id, :idAula, :dniUser, :fecha_reserva)");
-            $consulta->bindParam(':id', $this->id);
+            $consulta = $link->prepare("INSERT INTO reservas (idAula, dniUser, diaInicio, horaInicio, diaFin, horaFin) VALUES (:idAula, :dniUser, :diaInicio, :horaInicio, :diaFin, :horaFin)");
             $consulta->bindParam(':idAula', $this->idAula);
             $consulta->bindParam(':dniUser', $this->dniUser);
-            $consulta->bindParam(':fecha_reserva', $this->fecha_reserva);
+            $consulta->bindParam(':diaInicio', $this->diaInicio);
+            $consulta->bindParam(':horaInicio', $this->horaInicio);
+            $consulta->bindParam(':diaFin', $this->diaFin);
+            $consulta->bindParam(':horaFin', $this->horaFin);
             return $consulta->execute();
         } catch (PDOException $e) {
             $dato = "¡Error!: " . $e->getMessage() . "<br/>";
-            require "../view/mensaje.php";
+            echo "Error al ejecutar la consulta: " . $e->getMessage();
             die();
         }
     }
-
 }

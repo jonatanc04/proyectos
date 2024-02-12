@@ -7,6 +7,7 @@ const Aulas = () => {
 
   const [calendar, setCalendar] = useState([]);
   const [reservas, setReservas] = useState([]);
+  const [aulas, setAulas] = useState([]);
 
   const getData = async () => {
     const res = await axios.get("http://localhost/proyectos/spacemanagement/api/sCalendario/datosCalendario.php");
@@ -18,9 +19,15 @@ const Aulas = () => {
     setReservas(res.data);
   }
 
+  const getAulas = async () => {
+    const res = await axios.get("http://localhost/proyectos/spacemanagement/api/sClases/gestionClases.php");
+    setAulas(res.data);
+  }
+
   useEffect(() => {
     getData();
     getReservas();
+    getAulas();
   }, []);
 
   return ( 
@@ -28,7 +35,7 @@ const Aulas = () => {
       {!calendar ? (
         <p>No existe un calendario</p>
       ) : (
-        <VistaCalendar calendar={calendar} reservas={reservas} />
+        <VistaCalendar calendar={calendar} reservas={reservas} aulas={aulas}/>
       )}
     </div>
   );

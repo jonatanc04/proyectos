@@ -29,8 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $inputJSON = file_get_contents('php://input');
     $inputData = json_decode($inputJSON, true);
 
-    $reserva = new Reserva($inputData['id'], $inputData['idAula'], $inputData['dniUser'], $inputData['fecha_reserva']);
-    if (!$existe = $res->getReserva($base->link)) {
+    $reserva = new Reserva(null, $inputData['idAula'], $inputData['dniUser'], $inputData['diaInicio'], $inputData['horaInicio'], $inputData['diaFin'], $inputData['horaFin']);
+    if (!$existe = $reserva->getReserva($base->link)) {
         header("HTTP/1.1 200 OK");
         echo json_encode($reserva->reservar($base->link), JSON_UNESCAPED_UNICODE);
         exit();

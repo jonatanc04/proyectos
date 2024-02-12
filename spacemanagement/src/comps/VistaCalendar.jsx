@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import axios from 'axios';
+import Cookies from 'universal-cookie';
 import "../styles/vistaCalendar.css";
 
-export const VistaCalendar = ({ calendar, reservas }) => {
+export const VistaCalendar = ({ calendar, reservas, aulas }) => {
   const [horarioSeleccionado, setHorarioSeleccionado] = useState("m");
   const [currentDate, setCurrentDate] = useState(new Date());
   const [prevWeekDisabled, setPrevWeekDisabled] = useState(true);
@@ -11,9 +13,22 @@ export const VistaCalendar = ({ calendar, reservas }) => {
   const [selectedStartTime, setSelectedStartTime] = useState('');
   const [selectedEndDate, setSelectedEndDate] = useState('');
   const [selectedEndTime, setSelectedEndTime] = useState('');
+  const [selectedClass, setSelectedClass] = useState('');
+  const cookies = new Cookies(null, { path: '/' });
 
   useEffect(() => {
     const today = new Date();
+    const currentHour = today.getHours();
+    const currentMinute = today.getMinutes();
+    const morningEndTime = 14 * 60 + 10;
+    const currentTime = currentHour * 60 + currentMinute;
+
+    if (currentTime > morningEndTime) {
+      setHorarioSeleccionado("t");
+    } else {
+      setHorarioSeleccionado("m");
+    }
+
     const currentDay = today.getDay(); 
     const nextMonday = new Date(today);
     nextMonday.setDate(today.getDate() + (1 + 7 - currentDay) % 7);
@@ -24,9 +39,9 @@ export const VistaCalendar = ({ calendar, reservas }) => {
   
     const initialStartTime = "08:00:00";
     setSelectedStartTime(initialStartTime);
-    setSelectedEndTime(initialStartTime);
-  }, [weekdays]);
-  
+    setSelectedEndTime(sumarMinutos(initialStartTime, 50));
+    setSelectedClass("bb9ecf11-bba8-481b-a66d-7be9a9a9bb85");
+  }, [weekdays]);  
 
   const getDaysOfWeek = () => {
     const today = new Date();
@@ -88,25 +103,25 @@ export const VistaCalendar = ({ calendar, reservas }) => {
     return resultados;
   };
 
-  function sumarMinutos(hora, duracion) {
-    let separar = hora.split(":");
-    let horas = parseInt(separar[0]);
-    let minutos = parseInt(separar[1]);
-
-    minutos += parseInt(duracion);
-
+  function sumarMinutos(horaInicio, duracion) {
+    const [horasInicio, minutosInicio] = horaInicio.split(":").map(Number);
+    const duracionTotal = parseInt(duracion);
+  
+    let horas = horasInicio;
+    let minutos = minutosInicio + duracionTotal;
+  
     horas += Math.floor(minutos / 60);
     minutos %= 60;
-
+  
     if (horas >= 24) {
       horas %= 24;
     }
-
-    let horasStr = horas < 10 ? "0" + horas : horas.toString();
-    let minutosStr = minutos < 10 ? "0" + minutos : minutos.toString();
-
+  
+    const horasStr = horas < 10 ? "0" + horas : horas.toString();
+    const minutosStr = minutos < 10 ? "0" + minutos : minutos.toString();
+  
     return horasStr + ":" + minutosStr;
-  }
+  }  
 
   const handleTdClick = (horaInicio, dayName, dayNumber) => {
     console.log(`${horaInicio}-${dayName}-${dayNumber}`);
@@ -138,8 +153,34 @@ export const VistaCalendar = ({ calendar, reservas }) => {
     console.log("Día de inicio seleccionado:", selectedStartDate);
     console.log("Hora de inicio seleccionada:", selectedStartTime);
     console.log("Día de fin seleccionado:", selectedEndDate);
-    console.log("Hora de fin seleccionada:", selectedEndTime);
+    const [horas, minutos] = selectedEndTime.split(':');
+    const horaFormateada = `${horas.padStart(2, '0')}:${minutos.padStart(2, '0')}:00`;
+    console.log("Hora de fin seleccionada:", horaFormateada);
+    console.log("Clase seleccionada:", selectedClass);
+    const url = "http://localhost/proyectos/spacemanagement/api/sReservas/gestionReservas.php";
+    const data = {
+      idAula: selectedClass,
+      dniUser: cookies.get('user'),
+      diaInicio: selectedStartDate,
+      horaInicio: selectedStartTime,
+      diaFin: selectedEndDate,
+      horaFin: horaFormateada
+    }
+
+    axios.post(url, data)
+      .then(response => {
+        console.log('Respuesta:', response.data);
+      })
+      .catch(error => {
+        console.error('Error al realizar la solicitud:', error)
+      })
+
   };
+
+  const handleClassChange = (e) => {
+    setSelectedClass(e.target.value);
+  };
+  
 
   return (
     <div className='calendarContainer'>
@@ -159,6 +200,14 @@ export const VistaCalendar = ({ calendar, reservas }) => {
         <div className='cont-opt2'>
           <button disabled={prevWeekDisabled} onClick={previousWeek}>Semana Anterior</button>
           <button disabled={nextWeekDisabled} onClick={nextWeek}>Siguiente Semana</button>
+        </div>
+        <div className='cont-opt4'>
+          <label>Seleccionar clase:</label>
+          <select value={selectedClass} onChange={handleClassChange}>
+            {aulas.map((aula) => (
+              <option key={aula.id} value={aula.id}>{aula.nombre}</option>
+            ))}
+          </select>
         </div>
         <div className='cont-opt3'>
           <h2>Reservar aulas</h2>
@@ -190,12 +239,14 @@ export const VistaCalendar = ({ calendar, reservas }) => {
             <label>Hora de fin</label>
             <select onChange={(e) => setSelectedEndTime(e.target.value)}>
               {calendar.map((hora, index) => (
-                <option key={index} value={hora.horaInicio}>
-                  {formatHora(hora.horaInicio)}
+                <option key={index} value={sumarMinutos(hora.horaInicio, hora.duracion)}>
+                  {formatHora(sumarMinutos(hora.horaInicio, hora.duracion))}
                 </option>
               ))}
             </select>
-            <button type="submit">Submit</button>
+            <div className='contenedor-boton-flex'>
+              <button type="submit">Reservar</button>
+            </div>
           </form>
         </div>
       </div>
