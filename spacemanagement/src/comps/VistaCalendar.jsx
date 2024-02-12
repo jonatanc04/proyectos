@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import "../styles/vistaCalendar.css";
 
 export const VistaCalendar = ({ calendar, reservas }) => {
@@ -6,8 +6,58 @@ export const VistaCalendar = ({ calendar, reservas }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [prevWeekDisabled, setPrevWeekDisabled] = useState(true);
   const [nextWeekDisabled, setNextWeekDisabled] = useState(false);
+  const weekdays = useMemo(() => ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"], []);
+  const [selectedStartDate, setSelectedStartDate] = useState('');
+  const [selectedStartTime, setSelectedStartTime] = useState('');
+  const [selectedEndDate, setSelectedEndDate] = useState('');
+  const [selectedEndTime, setSelectedEndTime] = useState('');
 
-  const weekdays = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+  useEffect(() => {
+    const today = new Date();
+    const currentDay = today.getDay(); 
+    const nextMonday = new Date(today);
+    nextMonday.setDate(today.getDate() + (1 + 7 - currentDay) % 7);
+  
+    const initialStartDate = `${weekdays[nextMonday.getDay()]}-${nextMonday.getDate()}`;
+    setSelectedStartDate(initialStartDate);
+    setSelectedEndDate(initialStartDate);
+  
+    const initialStartTime = "08:00:00";
+    setSelectedStartTime(initialStartTime);
+    setSelectedEndTime(initialStartTime);
+  }, [weekdays]);
+  
+
+  const getDaysOfWeek = () => {
+    const today = new Date();
+    const currentDay = today.getDay(); 
+    const nextMonday = new Date(today);
+    nextMonday.setDate(today.getDate() + (1 + 7 - currentDay) % 7);
+    const days = [];
+
+    for (let i = 0; i < 5; i++) {
+      const date = new Date(nextMonday);
+      date.setDate(nextMonday.getDate() + i);
+      days.push(date);
+    }
+
+    for (let i = 0; i < 5; i++) {
+      const date = new Date(nextMonday);
+      date.setDate(nextMonday.getDate() + 7 + i);
+      days.push(date);
+    }
+    return days;
+  };
+
+  const formatDate = (date) => {
+    return `${weekdays[date.getDay()]} ${date.getDate()}`;
+  };
+
+  const formatHora = (detalladaHora) => {
+    const horaDetallada = new Date(`2000-01-01T${detalladaHora}`);
+    const horaFormateada = horaDetallada.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return horaFormateada;
+  }
 
   const nextWeek = () => {
     const nextWeekDate = new Date(currentDate);
@@ -37,12 +87,6 @@ export const VistaCalendar = ({ calendar, reservas }) => {
     const resultados = calendar.filter(objeto => objeto.horario === valor);
     return resultados;
   };
-
-  function formatHora(detalladaHora) {
-    const horaDetallada = new Date(`2000-01-01T${detalladaHora}`);
-    const horaFormateada = horaDetallada.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    return horaFormateada;
-  }
 
   function sumarMinutos(hora, duracion) {
     let separar = hora.split(":");
@@ -89,11 +133,18 @@ export const VistaCalendar = ({ calendar, reservas }) => {
     return false;
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Día de inicio seleccionado:", selectedStartDate);
+    console.log("Hora de inicio seleccionada:", selectedStartTime);
+    console.log("Día de fin seleccionado:", selectedEndDate);
+    console.log("Hora de fin seleccionada:", selectedEndTime);
+  };
+
   return (
     <div className='calendarContainer'>
-      
       <div className='opciones'>
-      <div className='monthYear'>{monthYearString}</div>
+        <div className='monthYear'>{monthYearString}</div>
         <div className='cont-opt1'>
           <p>Horario de:</p>
           <select 
@@ -109,8 +160,43 @@ export const VistaCalendar = ({ calendar, reservas }) => {
           <button disabled={prevWeekDisabled} onClick={previousWeek}>Semana Anterior</button>
           <button disabled={nextWeekDisabled} onClick={nextWeek}>Siguiente Semana</button>
         </div>
-        <div className='cont-op3'>
-          
+        <div className='cont-opt3'>
+          <h2>Reservar aulas</h2>
+          <form onSubmit={handleSubmit}>
+            <label>Día de inicio</label>
+            <select onChange={(e) => setSelectedStartDate(e.target.value)}>
+              {getDaysOfWeek().map((day, index) => (
+                <option key={index} value={`${weekdays[day.getDay()]}-${day.getDate()}`}>
+                  {formatDate(day)}
+                </option>
+              ))}
+            </select>
+            <label>Hora de inicio</label>
+            <select onChange={(e) => setSelectedStartTime(e.target.value)}>
+              {calendar.map((hora, index) => (
+                <option key={index} value={hora.horaInicio}>
+                  {formatHora(hora.horaInicio)}
+                </option>
+              ))}
+            </select>
+            <label>Día de fin</label>
+            <select onChange={(e) => setSelectedEndDate(e.target.value)}>
+              {getDaysOfWeek().map((day, index) => (
+                <option key={index} value={`${weekdays[day.getDay()]}-${day.getDate()}`}>
+                  {formatDate(day)}
+                </option>
+              ))}
+            </select>
+            <label>Hora de fin</label>
+            <select onChange={(e) => setSelectedEndTime(e.target.value)}>
+              {calendar.map((hora, index) => (
+                <option key={index} value={hora.horaInicio}>
+                  {formatHora(hora.horaInicio)}
+                </option>
+              ))}
+            </select>
+            <button type="submit">Submit</button>
+          </form>
         </div>
       </div>
       <table className='tabla-principal'>
@@ -145,3 +231,5 @@ export const VistaCalendar = ({ calendar, reservas }) => {
     </div>
   );
 };
+
+export default VistaCalendar;
