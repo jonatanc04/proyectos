@@ -42,7 +42,7 @@ export const VistaCalendar = ({ calendar, reservas, aulas }) => {
     setSelectedClass("bb9ecf11-bba8-481b-a66d-7be9a9a9bb85");
   }, [weekdays]);
   
-   
+  //hola
 
   const getDaysOfWeek = () => {
     const today = new Date();
