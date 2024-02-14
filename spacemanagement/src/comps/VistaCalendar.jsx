@@ -18,47 +18,49 @@ export const VistaCalendar = ({ calendar, reservas, aulas }) => {
 
   useEffect(() => {
     const today = new Date();
+    const currentDay = today.getDay(); 
+    const thisMonday = new Date(today);
+    thisMonday.setDate(today.getDate() - currentDay + 1);
+    const initialStartDate = `${weekdays[thisMonday.getDay()]}-${thisMonday.getDate()}`;
+    setSelectedStartDate(initialStartDate);
+    setSelectedEndDate(initialStartDate);
+  
     const currentHour = today.getHours();
     const currentMinute = today.getMinutes();
     const morningEndTime = 14 * 60 + 10;
     const currentTime = currentHour * 60 + currentMinute;
-
+  
     if (currentTime > morningEndTime) {
       setHorarioSeleccionado("t");
     } else {
       setHorarioSeleccionado("m");
     }
-
-    const currentDay = today.getDay(); 
-    const nextMonday = new Date(today);
-    nextMonday.setDate(today.getDate() + (1 + 7 - currentDay) % 7);
-  
-    const initialStartDate = `${weekdays[nextMonday.getDay()]}-${nextMonday.getDate()}`;
-    setSelectedStartDate(initialStartDate);
-    setSelectedEndDate(initialStartDate);
   
     const initialStartTime = "08:00:00";
     setSelectedStartTime(initialStartTime);
     setSelectedEndTime(sumarMinutos(initialStartTime, 50));
     setSelectedClass("bb9ecf11-bba8-481b-a66d-7be9a9a9bb85");
-  }, [weekdays]);  
+  }, [weekdays]);
+  
+   
 
   const getDaysOfWeek = () => {
     const today = new Date();
     const currentDay = today.getDay(); 
-    const nextMonday = new Date(today);
-    nextMonday.setDate(today.getDate() + (1 + 7 - currentDay) % 7);
+    const firstDayOfWeek = new Date(today);
+    firstDayOfWeek.setDate(firstDayOfWeek.getDate() - currentDay + 1);
+  
     const days = [];
-
+  
     for (let i = 0; i < 5; i++) {
-      const date = new Date(nextMonday);
-      date.setDate(nextMonday.getDate() + i);
+      const date = new Date(firstDayOfWeek);
+      date.setDate(firstDayOfWeek.getDate() + i);
       days.push(date);
     }
-
+  
     for (let i = 0; i < 5; i++) {
-      const date = new Date(nextMonday);
-      date.setDate(nextMonday.getDate() + 7 + i);
+      const date = new Date(firstDayOfWeek);
+      date.setDate(firstDayOfWeek.getDate() + 7 + i);
       days.push(date);
     }
     return days;
@@ -92,9 +94,10 @@ export const VistaCalendar = ({ calendar, reservas, aulas }) => {
 
   const currentWeekdays = Array.from({ length: 5 }, (_, i) => {
     const day = new Date(currentDate);
-    day.setDate(currentDate.getDate() + i - currentDate.getDay() + 1);
+    day.setDate(currentDate.getDate() - currentDate.getDay() + 1 + i);
     return { name: weekdays[day.getDay()], number: day.getDate() };
   });
+  
 
   const monthYearString = `${currentDate.toLocaleString('default', { month: 'long' }).replace(/^\w/, c => c.toUpperCase())} ${currentDate.getFullYear()}`;
 
@@ -148,6 +151,59 @@ export const VistaCalendar = ({ calendar, reservas, aulas }) => {
     return false;
   };
 
+  const getActualDate = () => {
+    var now = new Date();
+    var hours = now.getHours();
+    var minutes = now.getMinutes();
+    var seconds = now.getSeconds();
+    return hours + ':' + minutes + ':' + seconds;
+  }
+
+  function compararHoras(hora1) {
+    var hora2 = getActualDate();
+    var [horas1, minutos1, segundos1] = hora1.split(':');
+    var [horas2, minutos2, segundos2] = hora2.split(':');
+
+    if (parseInt(horas1) < parseInt(horas2)) {
+        return false;
+    } else if (parseInt(horas1) > parseInt(horas2)) {
+        return true;
+    }
+
+    if (parseInt(minutos1) < parseInt(minutos2)) {
+        return false;
+    } else if (parseInt(minutos1) > parseInt(minutos2)) {
+        return true;
+    }
+
+    if (parseInt(segundos1) < parseInt(segundos2)) {
+        return false;
+    } else if (parseInt(segundos1) > parseInt(segundos2)) {
+        return true;
+    }
+
+    return false;
+  }
+
+  function compararDias (dia1) {
+    var now = new Date();
+    var [dia, numero] = dia1.split('-');
+    var diaDeLaSemana = now.getDay();
+    var numeroDeDia = now.getDate();
+
+    var diasDeLaSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    var nombreDia = diasDeLaSemana[diaDeLaSemana];
+
+    if (dia === nombreDia && parseInt(numero) === numeroDeDia) {
+      return true;
+    } else {
+      console.log(dia + " " + nombreDia);
+      console.log(numero + " " + numeroDeDia);
+      return false;
+    }
+  }
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Día de inicio seleccionado:", selectedStartDate);
@@ -157,24 +213,32 @@ export const VistaCalendar = ({ calendar, reservas, aulas }) => {
     const horaFormateada = `${horas.padStart(2, '0')}:${minutos.padStart(2, '0')}:00`;
     console.log("Hora de fin seleccionada:", horaFormateada);
     console.log("Clase seleccionada:", selectedClass);
-    const url = "http://localhost/proyectos/spacemanagement/api/sReservas/gestionReservas.php";
-    const data = {
-      idAula: selectedClass,
-      dniUser: cookies.get('user'),
-      diaInicio: selectedStartDate,
-      horaInicio: selectedStartTime,
-      diaFin: selectedEndDate,
-      horaFin: horaFormateada
-    }
 
-    axios.post(url, data)
+    var comprobarHoraConActual = compararHoras(selectedStartTime);
+    var comprobarDiasConActual = compararDias(selectedStartDate);
+
+    if (!comprobarHoraConActual) {
+      console.log(comprobarHoraConActual);
+      console.log(comprobarDiasConActual);
+    } else {
+      const url = "http://localhost/proyectos/spacemanagement/api/sReservas/gestionReservas.php";
+      const data = {
+        idAula: selectedClass,
+        dniUser: cookies.get('user'),
+        diaInicio: selectedStartDate,
+        horaInicio: selectedStartTime,
+        diaFin: selectedEndDate,
+        horaFin: horaFormateada
+      }
+
+      axios.post(url, data)
       .then(response => {
         console.log('Respuesta:', response.data);
       })
       .catch(error => {
         console.error('Error al realizar la solicitud:', error)
       })
-
+    }
   };
 
   const handleClassChange = (e) => {
