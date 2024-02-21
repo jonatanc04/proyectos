@@ -197,8 +197,8 @@ export const VistaCalendar = ({ calendar, reservas, aulas }) => {
     if (dia === nombreDia && parseInt(numero) === numeroDeDia) {
       return true;
     } else {
-      console.log(dia + " " + nombreDia);
-      console.log(numero + " " + numeroDeDia);
+      console.log("Dia que pillo:" + dia + " " + numero);
+      console.log("Dia actual:" + nombreDia + " " + numeroDeDia);
       return false;
     }
   }
