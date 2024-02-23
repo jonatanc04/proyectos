@@ -1,0 +1,44 @@
+.boton-click {
+    cursor: pointer;
+    width: 80px;
+    height: 80px;
+    margin-left: 10px;
+    margin-bottom: 4px;
+    border: 3px solid white;
+    border-radius: 30px;
+    font-size: 30px;
+    font-weight: bold;
+    color: white;
+    background-color: rgb(85, 85, 85);
+}
+
+.boton-click:hover {
+    background-color: rgb(53, 53, 53);
+}
+
+.boton-click:nth-child(5), .boton-click:nth-child(9), .boton-click:nth-child(13), .boton-click:nth-child(17) {
+    background-color: rgb(0, 90, 0);
+}
+
+.boton-click:nth-child(5):hover, .boton-click:nth-child(9):hover, .boton-click:nth-child(13):hover, .boton-click:nth-child(17):hover {
+    background-color: rgb(0, 65, 0);
+}
+
+.boton-borrar {
+    cursor: pointer;
+    grid-column: 1/5;
+    height: 80px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 4px;
+    border: 3px solid white;
+    border-radius: 30px;
+    font-size: 30px;
+    font-weight: bold;
+    color: white;
+    background-color: rgb(161, 0, 0);
+}
+
+.boton-borrar:hover {
+    background-color: rgb(116, 0, 0);
+}

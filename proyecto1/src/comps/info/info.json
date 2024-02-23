@@ -1,0 +1,23 @@
+[
+  {
+    "foto": "sue",
+    "nombre": "Suzette Hartland",
+    "equipo": "Raimon",
+    "posicion": "Delantera",
+    "opinion": "Erik es el compañero perfecto, además es mi cariñín. Tori es mi mejor amiga, el Baile de Mariposas con ella es mucho más fuerte."
+  },
+  {
+    "foto": "roma",
+    "nombre": "Ryoma Nishiki",
+    "equipo": "Raimon",
+    "posicion": "Centrocampista",
+    "opinion": "¡Pardiez! No puede ser que me hayan arrebatado el puesto de delantero... ¡seguro que seré el mejor mediapunta de todos!"
+  },
+  {
+    "foto": "duske",
+    "nombre": "Duske Grayling",
+    "equipo": "Polaris",
+    "posicion": "Portero",
+    "opinion": "Pararé todos los disparos que me hagan, no importa quien dispare... justo a Nosaka formamos el mejor equipo de todos, nadie podrá ganarnos."
+  }
+]
