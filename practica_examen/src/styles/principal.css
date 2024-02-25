@@ -1,0 +1,10 @@
+.principal-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.principal-container h1 {
+    margin: 40px;
+}
