@@ -2,7 +2,10 @@ import './App.css';
 import IniciarSesion from './views/iniciarSesion';
 import Principal from './views/principal';
 import Header from './comps/header';
+import ProtectedRoutes from './comps/ProtectedRoutes';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { useState } from 'react';
+import Administrar from './views/administrar';
 
 function App() {
 
@@ -10,25 +13,42 @@ function App() {
     {
       username: "jonatan",
       password: "12345678",
-      rol: "admin"
+      rol: ['user']
     },
     {
       username: "fajardo",
       password: "12345678",
-      rol: "admin"
+      rol: ['admin']
     }
   ]
 
+  const [usuario, setUsuario] = useState(null);
+
+  const manejarLogin = usuario => {
+    setUsuario(usuario);
+  }
+
   return (
-    <div className="App">
-      <Header />
-      <Router>
+    <Router>
+      <div className="App">
+        <Header usuario={usuario} manejarLogin={manejarLogin} />
         <Routes>
-          <Route path='/' element={<IniciarSesion usuarios={usuarios}></IniciarSesion>}></Route>
-          <Route path='/principal' element={<Principal></Principal>}></Route>
+          <Route path='/' element={<IniciarSesion usuarios={usuarios} manejarLogin={manejarLogin} />} />
+          <Route element={<ProtectedRoutes estaLogueado={usuario}></ProtectedRoutes>}>
+            <Route path='/principal' element={<Principal />} />
+          </Route>
+
+          <Route path='/administrar' element={
+            <ProtectedRoutes
+              estaLogueado={!!usuario && usuario.rol.includes('admin')}
+              redirectTo='/principal'
+            >
+              <Administrar />
+            </ProtectedRoutes>
+          } />
         </Routes>
-      </Router>
-    </div>
+      </div>
+    </Router>
   );
 }
 

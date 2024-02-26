@@ -1,12 +1,12 @@
 import "../styles/principal.css";
 
-export default function Principal() {
+export default function Administrar() {
 
   
 
   return (
     <div className="principal-container">
-      <h1>Principal</h1>
+      <h1>¡Hola, administrador!</h1>
     </div>
   );
 }

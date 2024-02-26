@@ -3,17 +3,21 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from "react-router-dom";
 import "../styles/iniciarSesion.css";
 
-export default function FormInicio( {usuarios} ) {
+export default function FormInicio( {usuarios, manejarLogin} ) {
 
   const navigate = useNavigate();
   const { register, formState: {errors}, handleSubmit } = useForm();
 
   const onSubmit = (data) => {
-    const usuarioEncontrado = usuarios.find((usuario) => {
-      return usuario.username === data.username && usuario.password === data.password;
-    });
+    const usuarioEncontrado = usuarios.find((usuario) => 
+    usuario.username === data.username && usuario.password === data.password 
+    ? usuario 
+    : null
+);
+
   
-    if (usuarioEncontrado) {
+    if (usuarioEncontrado !== null) {
+      manejarLogin(usuarioEncontrado);
       navigate('/principal');
     }
   };  
