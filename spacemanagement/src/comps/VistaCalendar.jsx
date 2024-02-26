@@ -41,8 +41,6 @@ export const VistaCalendar = ({ calendar, reservas, aulas }) => {
     setSelectedEndTime(sumarMinutos(initialStartTime, 50));
     setSelectedClass("bb9ecf11-bba8-481b-a66d-7be9a9a9bb85");
   }, [weekdays]);
-  
-  //hola
 
   const getDaysOfWeek = () => {
     const today = new Date();
@@ -132,25 +130,36 @@ export const VistaCalendar = ({ calendar, reservas, aulas }) => {
 
   const pastTo = (horaInicio, dayNumber) => {
     const currentDate = new Date();
-    const currentHour = currentDate.getHours();
-    const currentMinute = currentDate.getMinutes();
     const currentYear = currentDate.getFullYear();
     const currentMonth = currentDate.getMonth();
     const currentDay = currentDate.getDate();
-
+    const currentHour = currentDate.getHours();
+    const currentMinute = currentDate.getMinutes();
+  
     const [hora, minutos] = horaInicio.split(':');
     const startHour = parseInt(hora);
     const startMinute = parseInt(minutos);
-
-    const currentDateTime = new Date(currentYear, currentMonth, currentDay, currentHour, currentMinute);
-    const comparedDateTime = new Date(currentYear, currentMonth, dayNumber, startHour, startMinute);
-
-    if (comparedDateTime <= currentDateTime) {
-      return true;
+  
+    if (currentDay === dayNumber && currentMonth === currentDate.getMonth()) {
+      if (startHour < currentHour || (startHour === currentHour && startMinute <= currentMinute)) {
+        return true;
+      }
+    } else {
+      if ((currentDay >= 20 && currentMonth === 11) || (currentDay < 20 && currentMonth === 0)) {
+        const nextMonth = currentMonth === 11 ? 0 : currentMonth + 1;
+        const nextMonthYear = currentMonth === 11 ? currentYear + 1 : currentYear;
+        const comparedDateTime = new Date(nextMonthYear, nextMonth, dayNumber, startHour, startMinute);
+        return comparedDateTime <= currentDate;
+      } else if (currentDay >= 20) {
+        const nextMonth = currentMonth + 1;
+        const comparedDateTime = new Date(currentYear, nextMonth, dayNumber, startHour, startMinute);
+        return comparedDateTime <= currentDate;
+      }
     }
+  
     return false;
   };
-
+  
   const getActualDate = () => {
     var now = new Date();
     var hours = now.getHours();
@@ -159,8 +168,15 @@ export const VistaCalendar = ({ calendar, reservas, aulas }) => {
     return hours + ':' + minutes + ':' + seconds;
   }
 
-  function compararHoras(hora1) {
-    var hora2 = getActualDate();
+  function compararHorasConActual (hora1, horaFin) {
+    var hora2;
+
+    if (horaFin === null) {
+      hora2 = getActualDate();
+    } else {
+      hora2 = horaFin;
+    }
+
     var [horas1, minutos1, segundos1] = hora1.split(':');
     var [horas2, minutos2, segundos2] = hora2.split(':');
 
@@ -185,22 +201,58 @@ export const VistaCalendar = ({ calendar, reservas, aulas }) => {
     return false;
   }
 
-  function compararDias (dia1) {
-    var now = new Date();
-    var [dia, numero] = dia1.split('-');
-    var diaDeLaSemana = now.getDay();
-    var numeroDeDia = now.getDate();
+  function compararDiasConActual(dia1, dia2) {
+    var now;
 
-    var diasDeLaSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-    var nombreDia = diasDeLaSemana[diaDeLaSemana];
+    if (dia2 === null) {
+      now = new Date();
+      var [dia, numero] = dia1.split('-');
+      var numeroDeDia = now.getDate();
 
-    if (dia === nombreDia && parseInt(numero) === numeroDeDia) {
-      return true;
+      if (parseInt(numero) < 11 && numeroDeDia > 20) {
+        return true;
+      } else {
+        if (parseInt(numero) < numeroDeDia) {
+          return false;
+        } else {
+          return true;
+        }
+      }
     } else {
-      console.log("Dia que pillo:" + dia + " " + numero);
-      console.log("Dia actual:" + nombreDia + " " + numeroDeDia);
-      return false;
+      var [dia, numero] = dia1.split('-');
+      var [diaB, numeroB] = dia2.split('-');
+
+      if (parseInt(numero) < 11 && parseInt(numeroB) > 20) {
+        return true;
+      } else {
+        if (parseInt(numero) < parseInt(numeroB)) {
+          return false;
+        } else {
+          return true;
+        }
+      }
     }
+    
+  }
+
+  function comprobarReserva (diaInicio, horaInicio, diaFin, horaFin) {
+    if (compararDiasConActual(diaInicio, null)) {
+      if(compararHorasConActual(horaInicio, null)) {
+        if (diaInicio === diaFin) {
+          if(compararHorasConActual(horaFin, horaInicio)) {
+            console.log("Reserva vertical");
+            return true;
+          }
+        } else if (compararDiasConActual(diaFin, diaInicio)) {
+          if(compararHorasConActual(horaFin, horaInicio)) {
+            console.log("Reserva horizontal");
+            return true;
+          }
+        }
+      }
+    }
+
+    return false;
   }
 
 
@@ -213,13 +265,12 @@ export const VistaCalendar = ({ calendar, reservas, aulas }) => {
     const horaFormateada = `${horas.padStart(2, '0')}:${minutos.padStart(2, '0')}:00`;
     console.log("Hora de fin seleccionada:", horaFormateada);
     console.log("Clase seleccionada:", selectedClass);
+    console.log("----------------------------------------------------")
 
-    var comprobarHoraConActual = compararHoras(selectedStartTime);
-    var comprobarDiasConActual = compararDias(selectedStartDate);
+    let reservaValida = comprobarReserva(selectedStartDate, selectedStartTime, selectedEndDate, horaFormateada);
 
-    if (!comprobarHoraConActual) {
-      console.log(comprobarHoraConActual);
-      console.log(comprobarDiasConActual);
+    if (!reservaValida) {
+      console.log("Error en la reserva");
     } else {
       const url = "http://localhost/proyectos/spacemanagement/api/sReservas/gestionReservas.php";
       const data = {

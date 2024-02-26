@@ -26,7 +26,7 @@ export default function Header( {usuario, manejarLogin} ) {
           Administrar
         </NavLink>
       ):(
-        <></>
+        null
       )}
     </nav>
   );

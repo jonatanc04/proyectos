@@ -14,8 +14,6 @@ export default function FormInicio( {usuarios, manejarLogin} ) {
     ? usuario 
     : null
 );
-
-  
     if (usuarioEncontrado !== null) {
       manejarLogin(usuarioEncontrado);
       navigate('/principal');

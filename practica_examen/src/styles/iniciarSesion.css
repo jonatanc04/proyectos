@@ -9,6 +9,10 @@
     margin: 40px;
 }
 
+.principal-sesion input {
+    width: 100%;
+}
+
 .formulario-acceso {
     width: 180px;
     height: 200px;
