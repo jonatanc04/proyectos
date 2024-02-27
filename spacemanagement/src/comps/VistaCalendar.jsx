@@ -133,32 +133,23 @@ export const VistaCalendar = ({ calendar, reservas, aulas }) => {
     const currentYear = currentDate.getFullYear();
     const currentMonth = currentDate.getMonth();
     const currentDay = currentDate.getDate();
-    const currentHour = currentDate.getHours();
-    const currentMinute = currentDate.getMinutes();
   
     const [hora, minutos] = horaInicio.split(':');
     const startHour = parseInt(hora);
     const startMinute = parseInt(minutos);
   
-    if (currentDay === dayNumber && currentMonth === currentDate.getMonth()) {
-      if (startHour < currentHour || (startHour === currentHour && startMinute <= currentMinute)) {
-        return true;
-      }
-    } else {
-      if ((currentDay >= 20 && currentMonth === 11) || (currentDay < 20 && currentMonth === 0)) {
-        const nextMonth = currentMonth === 11 ? 0 : currentMonth + 1;
-        const nextMonthYear = currentMonth === 11 ? currentYear + 1 : currentYear;
-        const comparedDateTime = new Date(nextMonthYear, nextMonth, dayNumber, startHour, startMinute);
-        return comparedDateTime <= currentDate;
-      } else if (currentDay >= 20) {
-        const nextMonth = currentMonth + 1;
-        const comparedDateTime = new Date(currentYear, nextMonth, dayNumber, startHour, startMinute);
-        return comparedDateTime <= currentDate;
-      }
+    const eventDate = new Date(currentYear, currentMonth, dayNumber, startHour, startMinute);
+    const eventHasPassed = eventDate < currentDate;
+    const isBetween1And11 = dayNumber >= 1 && dayNumber <= 11;
+    const isDayAfter20 = currentDay > 20;
+    if (isDayAfter20 && isBetween1And11) {
+      return false;
     }
   
-    return false;
+    return eventHasPassed;
   };
+  
+  
   
   const getActualDate = () => {
     var now = new Date();
@@ -168,7 +159,7 @@ export const VistaCalendar = ({ calendar, reservas, aulas }) => {
     return hours + ':' + minutes + ':' + seconds;
   }
 
-  function compararHorasConActual (hora1, horaFin) {
+  function compararHoras (hora1, horaFin) {
     var hora2;
 
     if (horaFin === null) {
@@ -201,60 +192,61 @@ export const VistaCalendar = ({ calendar, reservas, aulas }) => {
     return false;
   }
 
-  function compararDiasConActual(dia1, dia2) {
-    var now;
+  function compararDias (dia1, dia2) {
+
+    var [, diaInicioStr] = dia1.split('-');
+    var diaInicio = parseInt(diaInicioStr);
+    var diaFin;
+    var now = new Date();
+    var hoy = now.getDate();
 
     if (dia2 === null) {
-      now = new Date();
-      var [dia, numero] = dia1.split('-');
-      var numeroDeDia = now.getDate();
+      diaFin = now.getDate();
+    } else {
+      var [, diaStr] = dia2.split('-');
+      diaFin = parseInt(diaStr);
+    }
 
-      if (parseInt(numero) < 11 && numeroDeDia > 20) {
-        return true;
-      } else {
-        if (parseInt(numero) < numeroDeDia) {
-          return false;
+    console.log(diaInicio + " " + diaFin);
+
+    if (diaInicio >= hoy) {
+      if (diaInicio === diaFin) {
+        return "=";
+      } else if (diaInicio > diaFin) {
+        if (diaInicio >= 21 && diaFin <= 11) {
+          return "<";
         } else {
-          return true;
+          return ">";
         }
+      } else {
+        return "<";
       }
     } else {
-      var [dia, numero] = dia1.split('-');
-      var [diaB, numeroB] = dia2.split('-');
-
-      if (parseInt(numero) < 11 && parseInt(numeroB) > 20) {
-        return true;
-      } else {
-        if (parseInt(numero) < parseInt(numeroB)) {
-          return false;
-        } else {
-          return true;
-        }
-      }
+      return false;
     }
-    
   }
 
   function comprobarReserva (diaInicio, horaInicio, diaFin, horaFin) {
-    if (compararDiasConActual(diaInicio, null)) {
-      if(compararHorasConActual(horaInicio, null)) {
-        if (diaInicio === diaFin) {
-          if(compararHorasConActual(horaFin, horaInicio)) {
-            console.log("Reserva vertical");
-            return true;
-          }
-        } else if (compararDiasConActual(diaFin, diaInicio)) {
-          if(compararHorasConActual(horaFin, horaInicio)) {
-            console.log("Reserva horizontal");
-            return true;
+
+    //recuerda, si vas a comparar la horaInicio con la horaFin has de ponerlo al revés
+
+    if(compararDias(diaInicio, null) !== false) {
+      console.log("1");
+      console.log(compararDias(diaInicio, null));
+      if (compararDias(diaInicio, null) === '=') {
+        console.log("2");
+        if (compararHoras(horaInicio, null)) {
+          console.log("3");
+          if(compararHoras(horaFin, horaInicio)) {
+            console.log("yeyyy");
           }
         }
       }
     }
 
     return false;
+    
   }
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
