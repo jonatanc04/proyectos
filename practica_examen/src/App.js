@@ -35,7 +35,7 @@ function App() {
         <Routes>
           <Route path='/' element={<IniciarSesion usuarios={usuarios} manejarLogin={manejarLogin} />} />
           <Route element={<ProtectedRoutes estaLogueado={usuario}></ProtectedRoutes>}>
-            <Route path='/principal' element={<Principal />} />
+            <Route path='/principal' element={<Principal usuario={usuario} />} />
           </Route>
 
           <Route path='/administrar' element={
