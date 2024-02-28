@@ -1,0 +1,25 @@
+.weather-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+
+    width: 300px;
+    height: 500px;
+    margin: 30px;
+    background-color: rgb(20, 91, 156);
+}
+
+.weather-row h1 {
+    color: white;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    width: 250px;
+    height: 300px;
+    background-color: rgb(85, 151, 212);
+}
