@@ -19,11 +19,7 @@ export default function App () {
   const getDayConditions = useCallback(async (latitude, longitude) => {
     try {
       const res = await axios.get(
-        "https://api.openweathermap.org/data/2.5/weather?lat=" +
-          latitude +
-          "&lon=" +
-          longitude +
-          "&appid=0e667ddbcb64c26513245db14b041f67"
+        `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=0e667ddbcb64c26513245db14b041f67`
       );
       setDayConditions(res);
     } catch (error) {
@@ -73,7 +69,7 @@ export default function App () {
         <Routes>
           <Route path='/' element={<WeatherRow text={"Day conditions"} dayConditions={dayConditions}/>} />
           <Route element={<ProtectedRoutes isLogged={user} redirectTo='/' />}>
-            <Route path='/city' element={<Cities />}/>
+            <Route path='/city' element={<Cities latitude={latitude} longitude={longitude} />}/>
           </Route>
           <Route path='/login' element={<Login users={users} handleLogin={handleLogin} />} />
         </Routes>

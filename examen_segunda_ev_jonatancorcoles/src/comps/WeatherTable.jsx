@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "../styles/weather.css";
 import WeatherRow from "./WeatherRow";
 
-export default function WeatherTable ({weather}) {
+export default function WeatherTable ({ weather }) {
   const [weatherDias, setWeatherDias] = useState([]);
 
   useEffect(() => {
@@ -13,15 +13,18 @@ export default function WeatherTable ({weather}) {
   }, [weather]);
 
   if (!weather || !weather.list) {
-    return <h1>Cargando...</h1>
+    return <h1>Loading...</h1>
   }
 
   return (
-    <div className="contenedor-dias">
+    <>
+      <h1>{weather["city"].name}</h1>
+      <div className="contenedor-dias">
       {console.log(weatherDias)}
       {weatherDias.map((item, index) => (
         <WeatherRow text={"Day " + (index+1)} item={item}></WeatherRow>
       ))}
     </div>
+    </>
   );
 }

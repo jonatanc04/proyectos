@@ -2,15 +2,15 @@ import "../styles/row.css";
 import React from "react";
 
 export default function WeatherRow({ text, dayConditions }) {
+  if (!dayConditions || !dayConditions.data) {
+    return <h1>Loading...</h1>;
+  }
+
   const imgIcon = "https://openweathermap.org/img/wn/"+ dayConditions.data.weather[0]["icon"] +"@2x.png";
   const formatDate = new Date(dayConditions.data.dt * 1000);
   const formatTemp = (temp) => {
     const number = temp - 273.15;
     return (Number.parseFloat(number).toFixed(2));
-  }
-
-  if (!dayConditions || !dayConditions.data) {
-    return <div>Loading...</div>;
   }
 
   return (
