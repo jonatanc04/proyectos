@@ -228,19 +228,19 @@ export const VistaCalendar = ({ calendar, reservas, aulas }) => {
 
   function comprobarReserva (diaInicio, horaInicio, diaFin, horaFin) {
 
-    //recuerda, si vas a comparar la horaInicio con la horaFin has de ponerlo al revés
-
     if(compararDias(diaInicio, null) !== false) {
-      console.log("1");
-      console.log(compararDias(diaInicio, null));
       if (compararDias(diaInicio, null) === '=') {
-        console.log("2");
         if (compararHoras(horaInicio, null)) {
-          console.log("3");
           if(compararHoras(horaFin, horaInicio)) {
-            console.log("yeyyy");
+            return true;
           }
         }
+      } else if (compararDias(diaInicio, diaFin) === '=') {
+        if(compararHoras(horaFin, horaInicio)) {
+          return true;
+        }
+      } else if (compararDias(diaInicio, diaFin) === '<') {
+        return true;
       }
     }
 
