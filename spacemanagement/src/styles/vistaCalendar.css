@@ -143,3 +143,14 @@ td:first-child {
 .blocked {
     background-color: gray;
 }
+
+.boton-delete {
+    width: 25px;
+    height: 25px;
+    margin-left: 10px;
+    background-color: red;
+}
+
+.boton-delete:hover {
+    background-color: rgb(165, 34, 34);
+}

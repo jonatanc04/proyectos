@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 import "../styles/vistaCalendar.css";
@@ -14,6 +14,7 @@ export const VistaCalendar = ({ calendar, reservas, aulas }) => {
   const [selectedEndDate, setSelectedEndDate] = useState('');
   const [selectedEndTime, setSelectedEndTime] = useState('');
   const [selectedClass, setSelectedClass] = useState('');
+  const [reservasPorAula, setReservasPorAula] = useState([]);
   const cookies = new Cookies(null, { path: '/' });
 
   useEffect(() => {
@@ -41,6 +42,16 @@ export const VistaCalendar = ({ calendar, reservas, aulas }) => {
     setSelectedEndTime(sumarMinutos(initialStartTime, 50));
     setSelectedClass("bb9ecf11-bba8-481b-a66d-7be9a9a9bb85");
   }, [weekdays]);
+
+  const obtenerReservasPorAula = useCallback(() => {
+    const reservasFiltradas = reservas.filter(reserva => reserva.idAula === selectedClass);
+    setReservasPorAula(reservasFiltradas);
+  }, [reservas, selectedClass]);  
+
+  useEffect(() => {
+    obtenerReservasPorAula(); 
+  }, [obtenerReservasPorAula]);
+  
 
   const getDaysOfWeek = () => {
     const today = new Date();
@@ -149,8 +160,6 @@ export const VistaCalendar = ({ calendar, reservas, aulas }) => {
     return eventHasPassed;
   };
   
-  
-  
   const getActualDate = () => {
     var now = new Date();
     var hours = now.getHours();
@@ -257,7 +266,7 @@ export const VistaCalendar = ({ calendar, reservas, aulas }) => {
     const horaFormateada = `${horas.padStart(2, '0')}:${minutos.padStart(2, '0')}:00`;
     console.log("Hora de fin seleccionada:", horaFormateada);
     console.log("Clase seleccionada:", selectedClass);
-    console.log("----------------------------------------------------")
+    console.log("----------------------------------------------------");
 
     let reservaValida = comprobarReserva(selectedStartDate, selectedStartTime, selectedEndDate, horaFormateada);
 
@@ -277,6 +286,7 @@ export const VistaCalendar = ({ calendar, reservas, aulas }) => {
       axios.post(url, data)
       .then(response => {
         console.log('Respuesta:', response.data);
+        window.location.reload();
       })
       .catch(error => {
         console.error('Error al realizar la solicitud:', error)
@@ -287,7 +297,40 @@ export const VistaCalendar = ({ calendar, reservas, aulas }) => {
   const handleClassChange = (e) => {
     setSelectedClass(e.target.value);
   };
-  
+
+  const handleDeleteReservation = (reservationId) => {
+    console.log("Eliminar reserva con ID:", reservationId);
+  };
+
+
+  function checkReservation(reserva, currentDay, currentHour, currentMinute) {
+    const reservaDay = reserva.diaInicio.split('-')[1];
+    const reservaHourStart = reserva.horaInicio.split(':')[0];
+    const reservaMinuteStart = reserva.horaInicio.split(':')[1];
+    const reservaHourEnd = reserva.horaFin.split(':')[0];
+    const reservaMinuteEnd = reserva.horaFin.split(':')[1];
+
+
+    const currentDayNumber = parseInt(currentDay);
+    const reservaDayNumber = parseInt(reservaDay);
+    const currentHourNumber = parseInt(currentHour);
+    const currentMinuteNumber = parseInt(currentMinute);
+    const reservaHourStartNumber = parseInt(reservaHourStart);
+    const reservaMinuteStartNumber = parseInt(reservaMinuteStart);
+    const reservaHourEndNumber = parseInt(reservaHourEnd);
+    const reservaMinuteEndNumber = parseInt(reservaMinuteEnd);
+
+    if (currentDayNumber === reservaDayNumber &&
+        currentHourNumber < 23 &&
+        (currentHourNumber > reservaHourStartNumber ||
+        (currentHourNumber === reservaHourStartNumber && currentMinuteNumber >= reservaMinuteStartNumber)) &&
+        (currentHourNumber < reservaHourEndNumber ||
+        (currentHourNumber === reservaHourEndNumber && currentMinuteNumber < reservaMinuteEndNumber))) {
+      return true;
+    }
+
+    return false;
+  }
 
   return (
     <div className='calendarContainer'>
@@ -367,24 +410,55 @@ export const VistaCalendar = ({ calendar, reservas, aulas }) => {
           </tr>
         </thead>
         <tbody>
-          {filtrarPorPartes(calendar, horarioSeleccionado).map((hora, horaIndex) => (
-            hora.tipo === 'd' ? (
-              <tr className='descansos-tr' key={horaIndex}>
-                <td className='color-table'>{formatHora(hora.horaInicio) + " - " + sumarMinutos(hora.horaInicio, hora.duracion)}</td>
-                {currentWeekdays.map((day, dayIndex) => (
-                  pastTo(hora.horaInicio, day.number) ? (<td key={`${hora.horaInicio}-${dayIndex}`} className='blocked'></td>) : (<td key={`${hora.horaInicio}-${dayIndex}`} onClick={() => handleTdClick(hora.horaInicio, day.name, day.number)}></td>)
-                ))}
-              </tr>
-            ) : (
-              <tr key={horaIndex}>
-                <td className='color-table'>{formatHora(hora.horaInicio) + " - " + sumarMinutos(hora.horaInicio, hora.duracion)}</td>
-                {currentWeekdays.map((day, dayIndex) => (
-                  pastTo(hora.horaInicio, day.number) ? (<td key={`${hora.horaInicio}-${dayIndex}`} className='blocked'></td>) : (<td key={`${hora.horaInicio}-${dayIndex}`} onClick={() => handleTdClick(hora.horaInicio, day.name, day.number)}></td>)
-                ))}
-              </tr>
-            )
-          ))}
-        </tbody>
+  {filtrarPorPartes(calendar, horarioSeleccionado).map((hora, horaIndex) => (
+    hora.tipo === 'd' ? (
+      <tr className='descansos-tr' key={horaIndex}>
+        <td className='color-table'>{formatHora(hora.horaInicio) + " - " + sumarMinutos(hora.horaInicio, hora.duracion)}</td>
+        {currentWeekdays.map((day, dayIndex) => (
+          pastTo(hora.horaInicio, day.number) ? (
+            <td key={`${hora.horaInicio}-${dayIndex}`} className='blocked'></td>
+          ) : (
+            <td key={`${hora.horaInicio}-${dayIndex}`} onClick={() => handleTdClick(hora.horaInicio, day.name, day.number)}>
+              {reservasPorAula.map((reserva, index) => (
+                checkReservation(reserva, day.number, hora.horaInicio.split(':')[0], hora.horaInicio.split(':')[1]) && (
+                  <div key={index} className="reservado">
+                    Reservado
+                    {reserva.dniUser === cookies.get('user') && (
+                      <button className="boton-delete" onClick={() => handleDeleteReservation(reserva.id)}>B</button>
+                    )}
+                  </div>
+                )
+              ))}
+            </td>
+          )
+        ))}
+      </tr>
+    ) : (
+      <tr key={horaIndex}>
+        <td className='color-table'>{formatHora(hora.horaInicio) + " - " + sumarMinutos(hora.horaInicio, hora.duracion)}</td>
+        {currentWeekdays.map((day, dayIndex) => (
+          pastTo(hora.horaInicio, day.number) ? (
+            <td key={`${hora.horaInicio}-${dayIndex}`} className='blocked'></td>
+          ) : (
+            <td key={`${hora.horaInicio}-${dayIndex}`} onClick={() => handleTdClick(hora.horaInicio, day.name, day.number)}>
+              {reservasPorAula.map((reserva, index) => (
+                checkReservation(reserva, day.number, hora.horaInicio.split(':')[0], hora.horaInicio.split(':')[1]) && (
+                  <div key={index} className="reservado">
+                    Reservado
+                    {reserva.dniUser === cookies.get('user') && (
+                      <button className="boton-delete" onClick={() => handleDeleteReservation(reserva.id)}>B</button>
+                    )}
+                  </div>
+                )
+              ))}
+            </td>
+          )
+        ))}
+      </tr>
+    )
+  ))}
+</tbody>
+
       </table>
     </div>
   );
