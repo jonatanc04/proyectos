@@ -1,6 +1,14 @@
 <?php
 include "../config/corsConfig.php";
 include "config/autocarga.php";
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE");
+header("Access-Control-Allow-Headers: Content-Type");
+
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
 $base = new Base();
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
@@ -55,6 +63,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         }
     } else {
         echo json_encode(false);
+        exit();
+    }
+} else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
+    $dni = $_GET['delete'];
+    if ($dni) {
+        $usuario = new Usuario();
+        $eliminado = $usuario->eliminarUsuario($base->link, $dni);
+        if ($eliminado) {
+            header("HTTP/1.1 200 OK");
+            echo json_encode("Usuario eliminado correctamente");
+            exit();
+        } else {
+            header("HTTP/1.1 500 Internal Server Error");
+            echo json_encode("Error al eliminar usuario");
+            exit();
+        }
+    } else {
+        header("HTTP/1.1 400 Bad Request");
+        echo json_encode("DNI de usuario no proporcionado");
         exit();
     }
 }

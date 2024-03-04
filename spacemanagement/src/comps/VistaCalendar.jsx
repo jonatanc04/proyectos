@@ -299,9 +299,17 @@ export const VistaCalendar = ({ calendar, reservas, aulas }) => {
   };
 
   const handleDeleteReservation = (reservationId) => {
-    console.log("Eliminar reserva con ID:", reservationId);
+    const url = `http://localhost/proyectos/spacemanagement/api/sReservas/gestionReservas.php?id=${reservationId}`;
+  
+    axios.delete(url)
+      .then(response => {
+        console.log('Respuesta:', response.data);
+        window.location.reload();
+      })
+      .catch(error => {
+        console.error('Error al realizar la solicitud:', error);
+      });
   };
-
 
   function checkReservation(reserva, currentDay, currentHour, currentMinute) {
     const reservaDay = reserva.diaInicio.split('-')[1];
@@ -410,55 +418,54 @@ export const VistaCalendar = ({ calendar, reservas, aulas }) => {
           </tr>
         </thead>
         <tbody>
-  {filtrarPorPartes(calendar, horarioSeleccionado).map((hora, horaIndex) => (
-    hora.tipo === 'd' ? (
-      <tr className='descansos-tr' key={horaIndex}>
-        <td className='color-table'>{formatHora(hora.horaInicio) + " - " + sumarMinutos(hora.horaInicio, hora.duracion)}</td>
-        {currentWeekdays.map((day, dayIndex) => (
-          pastTo(hora.horaInicio, day.number) ? (
-            <td key={`${hora.horaInicio}-${dayIndex}`} className='blocked'></td>
-          ) : (
-            <td key={`${hora.horaInicio}-${dayIndex}`} onClick={() => handleTdClick(hora.horaInicio, day.name, day.number)}>
-              {reservasPorAula.map((reserva, index) => (
-                checkReservation(reserva, day.number, hora.horaInicio.split(':')[0], hora.horaInicio.split(':')[1]) && (
-                  <div key={index} className="reservado">
-                    Reservado
-                    {reserva.dniUser === cookies.get('user') && (
-                      <button className="boton-delete" onClick={() => handleDeleteReservation(reserva.id)}>B</button>
-                    )}
-                  </div>
-                )
-              ))}
-            </td>
-          )
-        ))}
-      </tr>
-    ) : (
-      <tr key={horaIndex}>
-        <td className='color-table'>{formatHora(hora.horaInicio) + " - " + sumarMinutos(hora.horaInicio, hora.duracion)}</td>
-        {currentWeekdays.map((day, dayIndex) => (
-          pastTo(hora.horaInicio, day.number) ? (
-            <td key={`${hora.horaInicio}-${dayIndex}`} className='blocked'></td>
-          ) : (
-            <td key={`${hora.horaInicio}-${dayIndex}`} onClick={() => handleTdClick(hora.horaInicio, day.name, day.number)}>
-              {reservasPorAula.map((reserva, index) => (
-                checkReservation(reserva, day.number, hora.horaInicio.split(':')[0], hora.horaInicio.split(':')[1]) && (
-                  <div key={index} className="reservado">
-                    Reservado
-                    {reserva.dniUser === cookies.get('user') && (
-                      <button className="boton-delete" onClick={() => handleDeleteReservation(reserva.id)}>B</button>
-                    )}
-                  </div>
-                )
-              ))}
-            </td>
-          )
-        ))}
-      </tr>
-    )
-  ))}
-</tbody>
-
+          {filtrarPorPartes(calendar, horarioSeleccionado).map((hora, horaIndex) => (
+            hora.tipo === 'd' ? (
+              <tr className='descansos-tr' key={horaIndex}>
+                <td className='color-table'>{formatHora(hora.horaInicio) + " - " + sumarMinutos(hora.horaInicio, hora.duracion)}</td>
+                {currentWeekdays.map((day, dayIndex) => (
+                  pastTo(hora.horaInicio, day.number) ? (
+                    <td key={`${hora.horaInicio}-${dayIndex}`} className='blocked'></td>
+                  ) : (
+                    <td key={`${hora.horaInicio}-${dayIndex}`} onClick={() => handleTdClick(hora.horaInicio, day.name, day.number)}>
+                      {reservasPorAula.map((reserva, index) => (
+                        checkReservation(reserva, day.number, hora.horaInicio.split(':')[0], hora.horaInicio.split(':')[1]) && (
+                          <div key={index} className="reservado">
+                            Reservado
+                            {(reserva.dniUser === cookies.get('user') || cookies.get('type') === 'root') && (
+                              <button className="boton-delete" onClick={() => handleDeleteReservation(reserva.id)}>B</button>
+                            )}
+                          </div>
+                        )
+                      ))}
+                    </td>
+                  )
+                ))}
+              </tr>
+            ) : (
+              <tr key={horaIndex}>
+                <td className='color-table'>{formatHora(hora.horaInicio) + " - " + sumarMinutos(hora.horaInicio, hora.duracion)}</td>
+                {currentWeekdays.map((day, dayIndex) => (
+                  pastTo(hora.horaInicio, day.number) ? (
+                    <td key={`${hora.horaInicio}-${dayIndex}`} className='blocked'></td>
+                  ) : (
+                    <td key={`${hora.horaInicio}-${dayIndex}`} onClick={() => handleTdClick(hora.horaInicio, day.name, day.number)}>
+                      {reservasPorAula.map((reserva, index) => (
+                        checkReservation(reserva, day.number, hora.horaInicio.split(':')[0], hora.horaInicio.split(':')[1]) && (
+                          <div key={index} className="reservado">
+                            Reservado
+                            {(reserva.dniUser === cookies.get('user') || cookies.get('type') === 'root') && (
+                              <button className="boton-delete" onClick={() => handleDeleteReservation(reserva.id)}>B</button>
+                            )}
+                          </div>
+                        )
+                      ))}
+                    </td>
+                  )
+                ))}
+              </tr>
+            )
+          ))}
+        </tbody>
       </table>
     </div>
   );

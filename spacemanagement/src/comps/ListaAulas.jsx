@@ -26,6 +26,25 @@ export default function ListaAulas({ onAulaAdded }) {
     fetchData();
   }, [onAulaAdded]);
 
+  const handleDeleteAula = async (id) => {
+    try {
+      const response = await fetch(
+        `http://localhost/proyectos/spacemanagement/api/sClases/gestionClases.php?delete=${id}`,
+        {
+          method: "DELETE",
+        }
+      );
+      if (response.ok) {
+        const updatedAulas = aulas.filter(aula => aula.id !== id);
+        setAulas(updatedAulas);
+      } else {
+        console.error("Error al eliminar aula");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <table>
       <tbody>
@@ -37,7 +56,15 @@ export default function ListaAulas({ onAulaAdded }) {
             {aulas.length > 0 ? (
               <ul>
                 {aulas.map((aula) => (
-                  <li key={aula.id}>{aula.nombre}</li>
+                  <li key={aula.id}>
+                    {aula.nombre}
+                    <div
+                      className="borrar-aula"
+                      onClick={() => handleDeleteAula(aula.id)}
+                    >
+                      Eliminar
+                    </div>
+                  </li>
                 ))}
               </ul>
             ) : (

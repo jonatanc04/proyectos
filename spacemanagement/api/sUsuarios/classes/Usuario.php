@@ -26,6 +26,18 @@ class Usuario {
         }
     }
 
+    function eliminarUsuario($link, $dni) {
+        try {
+            $consulta = $link->prepare("DELETE FROM usuarios WHERE dni = :dni");
+            $consulta->bindParam(':dni', $dni);
+            return $consulta->execute();
+        } catch (PDOException $e) {
+            $dato = "¡Error!: " . $e->getMessage() . "<br/>";
+            require "../view/mensaje.php";
+            die();
+        }
+    }
+
     function validar($link){
         try{
             $consulta = $link->prepare("SELECT * FROM usuarios WHERE user = :user");

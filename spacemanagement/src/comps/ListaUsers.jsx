@@ -26,6 +26,25 @@ export default function ListaUsers({ onUserAdded }) {
     fetchData();
   }, [onUserAdded]);
 
+  const handleDeleteUser = async (dni) => {
+    try {
+      const response = await fetch(
+        `http://localhost/proyectos/spacemanagement/api/sUsuarios/gestionUsuarios.php?delete=${dni}`,
+        {
+          method: "DELETE",
+        }
+      );
+      if (response.ok) {
+        const updatedUsers = users.filter(user => user.dni !== dni);
+        setUsers(updatedUsers);
+      } else {
+        console.error("Error al eliminar usuario");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <table>
       <tbody>
@@ -37,7 +56,15 @@ export default function ListaUsers({ onUserAdded }) {
             {users.length > 0 ? (
               <ul>
                 {users.map((user) => (
-                  <li key={user.dni}>{user.user} {user.dni} {user.type}</li>
+                  <li key={user.dni}>
+                    {user.user} {user.dni} {user.type}
+                    <button
+                      className="borrar-user"
+                      onClick={() => handleDeleteUser(user.dni)}
+                    >
+                      Eliminar
+                    </button>
+                  </li>
                 ))}
               </ul>
             ) : (

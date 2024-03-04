@@ -3,6 +3,18 @@
     padding: 20px;
 }
 
+.borrar-user {
+    background-color: rgb(255, 160, 160);
+    width: 60px;
+    margin-left: 10px;
+    height: 20px;
+    font-size: 16px;
+}
+
+.borrar-user:hover {
+    background-color: rgb(250, 81, 81);
+}
+
 li {
     cursor: pointer;
     margin-left: 40px;
@@ -18,4 +30,23 @@ li:hover {
 .no-aulas {
     padding-left: 10px;
     color: red;
+}
+
+.borrar-aula {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(255, 160, 160);
+    width: 60px;
+    margin-left: 10px;
+    height: 20px;
+    font-size: 16px;
+    border-radius: 20px;
+
+    transition: 0.4s ease;
+}
+
+.borrar-aula:hover {
+    box-shadow: 3px 3px 0;
+    background-color: rgb(250, 81, 81);
 }

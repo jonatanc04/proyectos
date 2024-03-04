@@ -49,4 +49,17 @@ class Clase {
         }
     }
 
+    function eliminar($link) {
+        try {
+            $consulta = $link->prepare("DELETE FROM aulas WHERE id = :id");
+            $consulta->bindParam(':id', $this->id);
+            return $consulta->execute();
+        } catch (PDOException $e) {
+            $dato = "¡Error!: " . $e->getMessage() . "<br/>";
+            require "../view/mensaje.php";
+            die();
+        }
+    }
+    
+
 }

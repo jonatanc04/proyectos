@@ -47,6 +47,21 @@ class Reserva {
         
     }
 
+    function deleteReserva($link) {
+        try {
+            $consulta = $link->prepare("DELETE FROM reservas WHERE id = :id");
+            $consulta->bindParam(':id', $this->id);
+            $consulta->execute();
+            return true;
+    
+        } catch(PDOException $e){
+            $dato = "¡Error!: " . $e->getMessage() . "<br/>";
+            require "../view/mensaje.php";
+            die();
+        }
+    }
+    
+
     function reservar($link) {
         try {
             $consulta = $link->prepare("INSERT INTO reservas (idAula, dniUser, diaInicio, horaInicio, diaFin, horaFin) VALUES (:idAula, :dniUser, :diaInicio, :horaInicio, :diaFin, :horaFin)");
