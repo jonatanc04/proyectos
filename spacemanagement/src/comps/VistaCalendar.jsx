@@ -44,9 +44,14 @@ export const VistaCalendar = ({ calendar, reservas, aulas }) => {
   }, [weekdays]);
 
   const obtenerReservasPorAula = useCallback(() => {
-    const reservasFiltradas = reservas.filter(reserva => reserva.idAula === selectedClass);
-    setReservasPorAula(reservasFiltradas);
-  }, [reservas, selectedClass]);  
+    if (reservas.length > 0) {
+      const reservasFiltradas = reservas.filter(reserva => reserva.idAula === selectedClass);
+      setReservasPorAula(reservasFiltradas);
+    } else {
+      setReservasPorAula([]);
+    }
+  }, [reservas, selectedClass]);
+   
 
   useEffect(() => {
     obtenerReservasPorAula(); 
@@ -89,16 +94,26 @@ export const VistaCalendar = ({ calendar, reservas, aulas }) => {
     const nextWeekDate = new Date(currentDate);
     nextWeekDate.setDate(nextWeekDate.getDate() + 7);
     setCurrentDate(nextWeekDate);
-    setPrevWeekDisabled(false);
-    setNextWeekDisabled(true);
+    if (cookies.get('type') === 'root') {
+      setPrevWeekDisabled(false);
+      setNextWeekDisabled(false);
+    } else {
+      setPrevWeekDisabled(false);
+      setNextWeekDisabled(true);
+    }
   };
 
   const previousWeek = () => {
     const previousWeekDate = new Date(currentDate);
     previousWeekDate.setDate(previousWeekDate.getDate() - 7);
     setCurrentDate(previousWeekDate);
-    setNextWeekDisabled(false);
-    setPrevWeekDisabled(true);
+    if (cookies.get('type') === 'root') {
+      setPrevWeekDisabled(false);
+      setNextWeekDisabled(false);
+    } else {
+      setPrevWeekDisabled(true);
+      setNextWeekDisabled(false);
+    }
   };
 
   const currentWeekdays = Array.from({ length: 5 }, (_, i) => {
@@ -106,7 +121,6 @@ export const VistaCalendar = ({ calendar, reservas, aulas }) => {
     day.setDate(currentDate.getDate() - currentDate.getDay() + 1 + i);
     return { name: weekdays[day.getDay()], number: day.getDate() };
   });
-  
 
   const monthYearString = `${currentDate.toLocaleString('default', { month: 'long' }).replace(/^\w/, c => c.toUpperCase())} ${currentDate.getFullYear()}`;
 
@@ -317,7 +331,6 @@ export const VistaCalendar = ({ calendar, reservas, aulas }) => {
     const reservaMinuteStart = reserva.horaInicio.split(':')[1];
     const reservaHourEnd = reserva.horaFin.split(':')[0];
     const reservaMinuteEnd = reserva.horaFin.split(':')[1];
-
 
     const currentDayNumber = parseInt(currentDay);
     const reservaDayNumber = parseInt(reservaDay);
