@@ -285,7 +285,7 @@ export const VistaCalendar = ({ calendar, reservas, aulas }) => {
     let reservaValida = comprobarReserva(selectedStartDate, selectedStartTime, selectedEndDate, horaFormateada);
 
     if (!reservaValida) {
-      console.log("Error en la reserva");
+      alert("La reserva introducida no es válida, por favor, revise los datos.");
     } else {
       const url = "http://localhost/proyectos/spacemanagement/api/sReservas/gestionReservas.php";
       const data = {
@@ -303,7 +303,7 @@ export const VistaCalendar = ({ calendar, reservas, aulas }) => {
         window.location.reload();
       })
       .catch(error => {
-        console.error('Error al realizar la solicitud:', error)
+        alert("Ha habido un error al introducir la reserva, por favor, inténtelo de nuevo.");
       })
     }
   };

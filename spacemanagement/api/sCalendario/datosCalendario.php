@@ -37,7 +37,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo json_encode(false);
         exit();
     }
+} else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
+    if (isset($_GET['espacio'])) {
+        if (Datos::borrarUltimoDato($base->link)) {
+            header("HTTP/1.1 200 OK");
+            echo json_encode(true);
+            exit();
+        } else {
+            echo json_encode(false);
+            exit();
+        }
+    } else {
+        if (Datos::borrarTodosLosDatos($base->link)) {
+            header("HTTP/1.1 200 OK");
+            echo json_encode(true);
+            exit();
+        } else {
+            echo json_encode(false);
+            exit();
+        }
+    }
 }
+
+
 
 header("HTTP/1.1 400 Bad Request");
 

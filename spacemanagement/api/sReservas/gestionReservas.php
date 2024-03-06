@@ -39,13 +39,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         exit();
     }
 } else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
-    $reserva = new Reserva($_GET['id']);
-    if ($existe = $reserva->getReserva($base->link)) {
-        header("HTTP/1.1 200 OK");
-        echo json_encode($reserva->deleteReserva($base->link), JSON_UNESCAPED_UNICODE);
-        exit();
+    if(isset($_GET['id'])) {
+        $reserva = new Reserva($_GET['id']);
+        if ($existe = $reserva->getReserva($base->link)) {
+            header("HTTP/1.1 200 OK");
+            echo json_encode($reserva->deleteReserva($base->link), JSON_UNESCAPED_UNICODE);
+            exit();
+        } else {
+            echo json_encode(false);
+            exit();
+        }
     } else {
-        echo json_encode(false);
-        exit();
+        if (Reserva::eliminarTodasLasReservas($base->link)) {
+            header("HTTP/1.1 200 OK");
+            echo json_encode(true);
+            exit();
+        } else {
+            echo json_encode(false);
+            exit();
+        }
     }
 }

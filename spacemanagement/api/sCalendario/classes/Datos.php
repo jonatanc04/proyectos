@@ -58,4 +58,37 @@ class Datos {
         }
     }
 
+    function borrarTodosLosDatos($link) {
+        try {
+            $consulta = $link->prepare("DELETE FROM datos");
+            $consulta->execute();
+            return true;
+        } catch(PDOException $e) {
+            $dato = "¡Error!: " . $e->getMessage() . "<br/>";
+            require "../view/mensaje.php";
+            die();
+        }
+    }
+    
+    static function borrarUltimoDato($link) {
+        try {
+            $consulta = $link->prepare("SELECT MAX(espacio) AS ultimoEspacio FROM datos");
+            $consulta->execute();
+            $ultimoEspacio = $consulta->fetch(PDO::FETCH_ASSOC)['ultimoEspacio'];
+            
+            if (!empty($ultimoEspacio)) {
+                $consulta = $link->prepare("DELETE FROM datos WHERE espacio = :espacio");
+                $consulta->bindParam(':espacio', $ultimoEspacio);
+                $consulta->execute();
+                return true;
+            } else {
+                return false;
+            }
+        } catch(PDOException $e) {
+            $dato = "¡Error!: " . $e->getMessage() . "<br/>";
+            require "../view/mensaje.php";
+            die();
+        }
+    }
+
 }

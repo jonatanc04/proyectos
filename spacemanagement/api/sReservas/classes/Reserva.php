@@ -20,6 +20,18 @@ class Reserva {
         $this->horaFin = $horaFin;
     }
 
+    static function eliminarTodasLasReservas($link) {
+        try {
+            $consulta = $link->prepare("DELETE FROM reservas");
+            $consulta->execute();
+            return true;
+        } catch(PDOException $e) {
+            $dato = "¡Error!: " . $e->getMessage() . "<br/>";
+            require "../view/mensaje.php";
+            die();
+        }
+    }
+
     static function todasLasReservas($link) {
         try{
             $consulta = $link->prepare("SELECT * FROM reservas");
