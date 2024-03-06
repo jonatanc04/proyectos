@@ -52,7 +52,7 @@ export default function CrearCalendario() {
           <DatosCalendario dates={dates}/>
         </div>
         <button onClick={deleteAllData}>Borrar todo</button>
-        <button onClick={deleteLastLine}>Eliminar últ. línea</button>
+        <button onClick={deleteLastLine}>Borrar últ. línea</button>
       </div>
     </div>
   );
